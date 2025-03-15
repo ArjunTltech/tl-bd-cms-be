@@ -1,6 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import indexRoute from '../src/routes/indexRoute.js'
+import indexRoute from './routes/indexRoute.js'
 import cors from 'cors'
 dotenv.config()
 const app =express()
