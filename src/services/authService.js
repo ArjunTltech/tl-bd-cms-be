@@ -1,4 +1,8 @@
 class AuthService {
+  #repository
+  constructor(repository){
+    this.#repository =repository
+  }
     async login(email, password) {
         try {
           if (!email) {
@@ -9,7 +13,9 @@ class AuthService {
             throw { status: 400, message: "Password is required." };
           }
     
-        //   const user = await this.userRepository.findByEmail(email);
+        const user = await this.#repository.findUserByEmail(email);
+       console.log(user,"service section");
+       
         //   if (!user) {
         //     throw { status: 401, message: "Invalid email or password." };
         //   }

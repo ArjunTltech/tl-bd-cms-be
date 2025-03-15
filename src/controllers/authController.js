@@ -4,9 +4,7 @@ class AuthController {
         this.#authService = authService
     }
     async login(req, res) {
-        try {
-            console.log(req.body);
-            
+        try {            
             const { email, password } = req.body
             const response = await this.#authService.login(email, password)
             return res.status(200).json({ success: true,  message: "Login successful." })
