@@ -9,7 +9,9 @@ app.use(cors("*"));
 app.use(express.urlencoded({ extended: true })); 
 const port =process.env.PORT
 const url =process.env.URL
-app.use('/api',indexRoute)
+
+
+app.use('/api/v1/admin',indexRoute)
 
 app.listen(port,()=>{
 console.log(`Server started successfully : ${url}${port}`);
