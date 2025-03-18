@@ -7,6 +7,11 @@ class Repositorys {
 
     return await prisma.findOne({ email });
   }
+    async findUserByEmail(email) {      
+      return await prisma.user.findUnique({
+        where: { email }
+      });
+    }    
 
   /**
    * User Repository - Handles CRUD operations for user management.

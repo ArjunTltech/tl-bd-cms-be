@@ -7,7 +7,7 @@ class AuthController {
         try {            
             const { email, password } = req.body
             const response = await this.#authService.login(email, password)
-            return res.status(200).json({ success: true,  message: "Login successful." })
+            return res.status(response.status).json(response)
         } catch (error) {
                 console.error("Error in AuthController:", error.message || error);
                 const statusCode = error.status || 500;
