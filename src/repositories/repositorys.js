@@ -2,11 +2,11 @@ import prisma from "../helpers/prisma.js"
 
 class Repositorys {
 
-    async findUserByEmail(email) {
-      console.log(email,"repoistory section reached");
-      
-      return await prisma.findOne({ email });
-    }
+    async findUserByEmail(email) {      
+      return await prisma.user.findUnique({
+        where: { email }
+      });
+    }    
 
 /**
  * User Repository - Handles CRUD operations for user management.
@@ -23,12 +23,18 @@ class Repositorys {
       where: {
           email,
       },
-   });
+   });}
+
+   async createEnquiry(enquiryData) {
+    console.log(enquiryData,"data");
+    
+    return await prisma.user.create({
+      data: enquiryData,
+    });
   }
-
-
-
-
+   async getEnquires(){
+    return await prisma.enquiry.findMany(); 
+  }
 
   }
   
