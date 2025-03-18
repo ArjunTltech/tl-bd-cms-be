@@ -1,7 +1,7 @@
 import express from 'express'
-import authRoute from '../routes/authRoute.js'
-import enquryRoute from '../routes/enquiriesRoute.js'
-import userRoute from '../routes/userRoute.js'
+import authRoute from './authRoute.js'
+import enquryRoute from './enquiriesRoute.js'
+import userRoute from './userRoute.js'
 const router = express.Router()
 
 

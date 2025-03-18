@@ -2,17 +2,7 @@ import prisma from "../helpers/prisma.js"
 
 class Repositorys {
 
-  async findUserByEmail(email) {
-    console.log(email, "repoistory section reached");
-
-    return await prisma.findOne({ email });
-  }
-    async findUserByEmail(email) {      
-      return await prisma.user.findUnique({
-        where: { email }
-      });
-    }    
-
+   
   /**
    * User Repository - Handles CRUD operations for user management.
    */
