@@ -1,7 +1,7 @@
 import  express from 'express'
-import AuthController from '../controllers/authController.js'
-import AuthService from '../services/authService.js'
-import Repositorys from '../repositories/repositorys.js'
+import AuthController from '../../controllers/authController.js'
+import AuthService from '../../services/authService.js'
+import Repositorys from '../../repositories/repositorys.js'
 
 const router =express.Router()
 const authController = new AuthController(new AuthService(new Repositorys))
