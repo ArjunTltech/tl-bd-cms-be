@@ -1,17 +1,19 @@
-class EnquiryController {
-    #enquiryService
-    constructor(enquiryService){
-        this.#enquiryService =enquiryService
+class SliderController {
+    #sliderService
+    constructor(sliderService){
+        this.#sliderService =sliderService
     }
     
-    async addEnquiry(req,res){
+    async addSlider(req,res){
         try {
-            const {name,email,phoneNumber,country,message,business,products,service} =req.body
-            const response = await this.#enquiryService.addEnquiry(name,email,phoneNumber,country,message,business,products,service) 
+           console.log(req.body);
+           
+            const {heading, subheading, tagline,content} =req.body
+            const response = await this.#sliderService.createSlider(heading, subheading, tagline,content,req) 
             return res.status(response.status).json(response);
             
         } catch (error) {
-            console.error("Error in EnquiryController:", error.message || error);
+            console.error("Error in SliderController:", error.message || error);
             const statusCode = error.status || 500;
             return res.status(statusCode).json({
               success: false,
@@ -19,12 +21,12 @@ class EnquiryController {
             });
         }
     }
-  async  enquiresDetails(req,res){
+  async  getSlider(req,res){
         try {
-            const response = await this.#enquiryService.enquiries()
+            const response = await this.#sliderService.getSlider()
             return res.status(response.status).json(response)
         } catch (error) {
-            console.error("Error in EnquiryController:", error.message || error);
+            console.error("Error in SliderController:", error.message || error);
             const statusCode = error.status || 500;
             return res.status(statusCode).json({
               success: false,
@@ -33,4 +35,4 @@ class EnquiryController {
         }
     }
 }
-export default EnquiryController
+export default SliderController

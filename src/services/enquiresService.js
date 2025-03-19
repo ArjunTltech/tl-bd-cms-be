@@ -3,12 +3,12 @@ class EnquiresService{
     constructor(reposistorys){
         this.#reposistorys =reposistorys
     }
-    async addEnquiry(name,email,phoneNumber,country,message,business,products){
+    async addEnquiry(name,email,phoneNumber,country,message,business,products,service){
         try {
-            if(!name|| !email|| !phoneNumber ||!country ||!message||!business||!products){
+            if(!name|| !email|| !phoneNumber ||!country ||!message||!business||!products ||!service){
                 return {status:400,message:"All fields Required"}
             }
-            const enquiresDetails ={name,email,phoneNumber,country,message,business,products}
+            const enquiresDetails ={name,email,phoneNumber,country,message,business,products,service}
             const enquiry = await this.#reposistorys.createEnquiry(enquiresDetails)
             if(!enquiry){
             return { success: false, status: 500, message: "Error creating enquiry" };
@@ -21,8 +21,9 @@ class EnquiresService{
     }
     async enquiries(){
         try {
-          const enquries = await this.#reposistorys.getEnquires()  
-          if(response){
+          const enquries = await this.#reposistorys.getAllEnquiries()  
+          
+          if(enquries){
             return {status:200,message:"Enquiries Details sent",enquries}
           }else{
             return {status:500,message:"Failed to sent enquiries details"}

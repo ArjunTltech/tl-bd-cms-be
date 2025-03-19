@@ -1,0 +1,7 @@
+model organizationDetails {
+  id       String @id @default(uuid())
+  email    String @unique
+  companyName String
+  phoneNumber String
+  logo String
+}

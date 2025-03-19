@@ -1,0 +1,27 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- CreateTable
+CREATE TABLE [dbo].[Slider] (
+    [id] NVARCHAR(1000) NOT NULL,
+    [heading] NVARCHAR(1000) NOT NULL,
+    [subheading] NVARCHAR(1000) NOT NULL,
+    [tagline] NVARCHAR(1000) NOT NULL,
+    [content] NVARCHAR(1000) NOT NULL,
+    [image] NVARCHAR(1000) NOT NULL,
+    CONSTRAINT [Slider_pkey] PRIMARY KEY CLUSTERED ([id])
+);
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

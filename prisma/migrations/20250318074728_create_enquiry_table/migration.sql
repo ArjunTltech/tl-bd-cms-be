@@ -1,0 +1,32 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- CreateTable
+CREATE TABLE [dbo].[Enquiry] (
+    [id] NVARCHAR(1000) NOT NULL,
+    [name] NVARCHAR(1000) NOT NULL,
+    [email] NVARCHAR(1000) NOT NULL,
+    [phoneNumber] NVARCHAR(1000) NOT NULL,
+    [country] NVARCHAR(1000) NOT NULL,
+    [business] NVARCHAR(1000) NOT NULL,
+    [service] NVARCHAR(1000) NOT NULL,
+    [message] NVARCHAR(1000) NOT NULL,
+    [products] NVARCHAR(1000) NOT NULL,
+    [createdAt] DATETIME2 NOT NULL CONSTRAINT [Enquiry_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT [Enquiry_pkey] PRIMARY KEY CLUSTERED ([id]),
+    CONSTRAINT [Enquiry_email_key] UNIQUE NONCLUSTERED ([email])
+);
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH
