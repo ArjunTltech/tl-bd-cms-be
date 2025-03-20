@@ -1,13 +1,6 @@
 import prisma from "../helpers/prisma.js"
 
-class Repositorys {
-
-
-    async findUserByEmail(email) {      
-      return await prisma.user.findUnique({
-        where: { email }
-      });
-    }    
+class Repositorys {  
 
   /**
    * User Repository - Handles CRUD operations for user management.
@@ -19,7 +12,7 @@ class Repositorys {
     });
   }
 
-  async updateUser(){
+  async updateUser(id,name,email,role){
     return  await prisma.user.update({
       where: {
           id
@@ -43,6 +36,14 @@ class Repositorys {
     });
   }
 
+  async deleteUser(id){
+   return await prisma.user.delete({
+      where: {
+          id
+      },
+  });
+  
+  }
   async findUserByEmail(email) {
     return await prisma.user.findUnique({
       where: {
@@ -51,14 +52,20 @@ class Repositorys {
     });
   }
   
- async findUserById(){
+ async findUserById(id){
    return await prisma.user.findUnique({
      where: {
          id
      },
  });
  } 
-//  Enquiry Section
+
+
+
+  /**
+   * Enquiry Repository - Handles CRUD operations for Enquiry management.
+   */
+
  async createEnquiry(enquiryData) {
   
   return await prisma.enquiry.create({ data: enquiryData });
@@ -68,7 +75,11 @@ async getAllEnquiries() {
   return await prisma.enquiry.findMany();
 }
 
-//OrganizationDetails Section
+
+
+  /**
+   * OrganizationDetails Repository - Handles CRUD operations for OrganizationDetails management.
+   */
 
 async createOrganizationDetails(organizationData) {
   
@@ -80,7 +91,10 @@ async getOrganizationDetails() {
   return await prisma.organizationDetails.findMany();
 }
 
-//Slider
+
+  /**
+   * Slider Repository - Handles CRUD operations for Slider management.
+   */
 
 async createSlider(sliderData){
   return await prisma.slider.create({ data: sliderData });
@@ -90,6 +104,10 @@ async getAllSlider(){
   return await prisma.slider.findMany();
 
 }
+
+
+
+
 
 
 
