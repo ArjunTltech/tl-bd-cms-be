@@ -26,22 +26,15 @@ this.#UserService=userService
         try {
             const { id } = req.params; 
             const { name, email, role } = req.body;
-                // Ensure all fields are provided
-    if (!name || !email || !role) {
-        return res.status(400).json({ message: "Please provide all the required fields" });
-    }
-
-    if (![UserType.ADMIN, UserType.SUPER_ADMIN].includes(role)) {
-        return res.status(400).json({ message: "Invalid role" });
-    }
-    const user = await this.#UserService.findUserById(id)
+    const user = await this.#UserService.updateUserService(id,name,email,role)
     return res.status(user.status).json(user);
-    
-            const response = await this.#UserService.updateUserService(name, email, role)
-        return res.status(response.status).json(response);
-
         } catch (error) {
-            
+            console.error("Error Updating User:",error.message || error)
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+              success: false,
+              message: error.message || "Internal server error.",
+            });
         }
     }
 
@@ -60,7 +53,21 @@ this.#UserService=userService
         }
     }
 
-
+    async deleteUser(req,res){
+        try {
+            const { id } = req.params;
+            const response = await this.#UserService.deleteUserService(id) 
+            return res.status(response.status).json(response);
+        } catch (error) {
+            
+            console.error("Error Deleting User:",error.message || error)
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+              success: false,
+              message: error.message || "Internal server error.",
+            });
+        }
+    }
 
     
 }

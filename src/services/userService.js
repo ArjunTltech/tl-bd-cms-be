@@ -57,14 +57,58 @@ class UserService {
   }
 
 
-async updateUserService(){
-  const user = await this.#repositorys.findUserById(id)
-  if(!user){
-    return { success: false, status: 400, message: "Email already exists" };
-
+async updateUserService(id,name,email,role){
+  try {
+    if (!name || !email || !role) {
+      return res.status(400).json({ message: "Please provide all the required fields" });
+  }
+  
+  if (![UserType.ADMIN, UserType.SUPER_ADMIN].includes(role)) {
+      return res.status(400).json({ message: "Invalid role" });
+  }
+    const userById = await this.#repositorys.findUserById(id)
+    if(!userById){
+      return { success: false, status: 400, message: "User not found" };  
+    }
+    const user = await this.#repositorys.updateUser(id,name,email,role)
+    if(!user){
+      return { success: false, status: 400, message: "Failed to Update User" };  
+    }
+    return { success: true, status: 200, message: "User updated successfully",            user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+  }, };   
+  } catch (error) {
+    console.error('Error during user update:', error);
+    return { success: false, status: 500, message: "Internal server error. Please try again later." };
+    
   }
 }
 
+async deleteUserService(id){
+  try {
+    if(!id){
+      return { success: false, status: 400, message: "Failed to get Id" };  
+    }
+    const userById = await this.#repositorys.findUserById(id)
+    if (!userById) {
+      return { success: false, status: 400, message: "User not found" };  
+    }
+    
+    const user = await this.#repositorys.deleteUser(id)
+    if (!user) {
+      return { success: false, status: 400, message: "Failed to delete user" };  
+    }
+    return { success: true, status: 200, message: "User deleted successfully " };  
+    
+    }
+   catch (error) {
+    console.error('Error during user delete:', error);
+    return { success: false, status: 500, message: "Internal server error. Please try again later." };
+  }
+  }
 
 
 
