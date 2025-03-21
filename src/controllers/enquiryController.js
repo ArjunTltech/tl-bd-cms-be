@@ -32,5 +32,19 @@ class EnquiryController {
             });
         }
     }
+  async deleteEnquiry(req,res){
+        try {
+            const enquiryId =req.params.id
+            const response = await this.#enquiryService.deleteEnquiry(enquiryId)
+            return res.status(response.status).json(response)
+        } catch (error) {
+            console.error("Error in EnquiryController:", error.message || error);
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+              success: false,
+              message: error.message || "Internal server error.",
+            });
+        }
+    }
 }
 export default EnquiryController

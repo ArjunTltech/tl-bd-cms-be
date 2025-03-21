@@ -7,6 +7,8 @@ import verifyToken from "../../utils/verifyToken.js";
 const router = express.Router();
 const enquiryController = new EnquiryController(new EnquiresService(new Repositorys())); 
 
-router.get("/enqiuries", (req, res) => enquiryController.enquiresDetails(req, res)); 
-router.post("/add-enqiuires",verifyToken,(req,res)=>enquiryController.addEnquiry(req,res))
+router.get("/get-all-enqiuries", (req, res) => enquiryController.enquiresDetails(req, res)); 
+router.post("/add-enqiuires",(req,res)=>enquiryController.addEnquiry(req,res))
+router.post("/delete-enqiuires/:id",(req,res)=>enquiryController.deleteEnquiry(req,res))
+
 export default router;

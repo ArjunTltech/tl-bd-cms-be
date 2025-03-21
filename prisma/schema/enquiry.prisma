@@ -1,12 +1,12 @@
 model Enquiry {
-  id         String  @id @default(uuid())
-  name       String
-  email      String  @unique
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
   phoneNumber String
-  country    String
-  business   String
-  service    String
-  message    String
-  products   String
-  createdAt  DateTime @default(now())
+  country     String
+  business    String
+  service     String
+  message     String
+  products    String
+  createdAt   DateTime @default(now())
 }

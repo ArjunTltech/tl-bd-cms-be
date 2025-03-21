@@ -33,5 +33,19 @@ class EnquiresService{
       throw error
         }
     }
+    async deleteEnquiry(enquiryId){
+        try {
+          const enquries = await this.#reposistorys.deleteEnquiry(enquiryId)  
+          
+          if(enquries){
+            return {status:200,message:"Enquiries Deleted Successfully"}
+          }else{
+            return {status:500,message:"Failed to delete enquirie"}
+          }
+        } catch (error) {
+            console.error("Error in EnquryService:", error.message || error);
+      throw error
+        }
+    }
 }
 export default EnquiresService
