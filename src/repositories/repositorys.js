@@ -1,4 +1,6 @@
 import prisma from "../helpers/prisma.js"
+import { v4 as uuidv4 } from 'uuid';
+
 
 class Repositorys {
 
@@ -123,11 +125,58 @@ class Repositorys {
 
 
 
+  /**
+   * Social Repository - Handles CRUD operations for Social management.
+   */
 
 
+  async createSocial(platform, url, isActive) {
+    return await prisma.social.create({
+      data: {
+        id: uuidv4(),
+        platform: platform.toLowerCase(),
+        url,
+        isActive: isActive !== undefined ? isActive : true,
+      },
+    });
+  }
 
+  async updateSocial(id, platform, url, isActive, existingSocial) {
+    return await prisma.social.update({
+      where: { id },
+      data: {
+        platform: platform === undefined ? existingSocial.platform : platform,
+        url: url !== undefined ? url : existingSocial.url,
+        isActive: isActive !== undefined ? isActive : existingSocial.isActive,
+        updatedAt: new Date()
+      }
+    });
+  }
 
+  async getAllSocials() {
+    return await prisma.social.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 
+  async deleteSocial(id) {
+    return await prisma.social.delete({
+      where: { id }
+    });
+  }
+
+  async findSocialById(id) {
+    return await prisma.social.findUnique({
+      where: {
+        id
+      },
+    });
+  }
+  async findFirstSocial(platform) {
+    return await prisma.social.findFirst({
+      where: { platform: platform.toLowerCase() },
+    });
+  }
 
 
 
