@@ -13,7 +13,7 @@ class OrganizationDetails {
             const orgationDetails = {
                 email, companyName, logo, phoneNumber
             }
-            const folderPath = 'bd/settings';
+            const folderPath = 'bd/organization';
             const result = await imageUploadToCloudinary(req.file, folderPath);
       
     

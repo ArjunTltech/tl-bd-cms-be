@@ -8,7 +8,7 @@ const generateJwtToken = (user) => {
         role: user.role
     };
 
-    return jwt.sign(payload,"123456789", {
+    return jwt.sign(payload,process.env.JWT_SECRET, {
         expiresIn: "30d",
     });
 }

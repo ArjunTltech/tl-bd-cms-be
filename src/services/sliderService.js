@@ -13,7 +13,7 @@ class SliderService {
             const sliderDetails = {
                 heading, subheading, tagline,description
             }
-            const folderPath = 'bd/settings';
+            const folderPath = 'bd/slider';
             const result = await imageUploadToCloudinary(req.file, folderPath);
       
     
