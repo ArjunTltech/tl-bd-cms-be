@@ -1,6 +1,8 @@
 import prisma from "../helpers/prisma.js"
+import { v4 as uuidv4 } from 'uuid';
 
-class Repositorys {  
+
+class Repositorys {
 
   /**
    * User Repository - Handles CRUD operations for user management.
@@ -12,15 +14,15 @@ class Repositorys {
     });
   }
 
-  async updateUser(id,name,email,role){
-    return  await prisma.user.update({
+  async updateUser(id, name, email, role) {
+    return await prisma.user.update({
       where: {
-          id
+        id
       },
       data: {
-          name,
-          email,
-          role,
+        name,
+        email,
+        role,
       },
     });
   }
@@ -36,13 +38,13 @@ class Repositorys {
     });
   }
 
-  async deleteUser(id){
-   return await prisma.user.delete({
+  async deleteUser(id) {
+    return await prisma.user.delete({
       where: {
-          id
+        id
       },
-  });
-  
+    });
+
   }
   async findUserByEmail(email) {
     return await prisma.user.findUnique({
@@ -51,14 +53,14 @@ class Repositorys {
       },
     });
   }
-  
- async findUserById(id){
-   return await prisma.user.findUnique({
-     where: {
-         id
-     },
- });
- } 
+
+  async findUserById(id) {
+    return await prisma.user.findUnique({
+      where: {
+        id
+      },
+    });
+  }
 
 
 
@@ -66,14 +68,14 @@ class Repositorys {
    * Enquiry Repository - Handles CRUD operations for Enquiry management.
    */
 
- async createEnquiry(enquiryData) {
-  
-  return await prisma.enquiry.create({ data: enquiryData });
-}
+  async createEnquiry(enquiryData) {
 
-async getAllEnquiries() {
-  return await prisma.enquiry.findMany();
-}
+    return await prisma.enquiry.create({ data: enquiryData });
+  }
+
+  async getAllEnquiries() {
+    return await prisma.enquiry.findMany();
+  }
 
 
 
@@ -81,37 +83,84 @@ async getAllEnquiries() {
    * OrganizationDetails Repository - Handles CRUD operations for OrganizationDetails management.
    */
 
-async createOrganizationDetails(organizationData) {
-  
-  return await prisma.organizationDetails.create({ data: organizationData });
-}
+  async createOrganizationDetails(organizationData) {
 
-async getOrganizationDetails() {
-  
-  return await prisma.organizationDetails.findMany();
-}
+    return await prisma.organizationDetails.create({ data: organizationData });
+  }
+
+  async getOrganizationDetails() {
+
+    return await prisma.organizationDetails.findMany();
+  }
 
 
   /**
    * Slider Repository - Handles CRUD operations for Slider management.
    */
 
-async createSlider(sliderData){
-  return await prisma.slider.create({ data: sliderData });
+  async createSlider(sliderData) {
+    return await prisma.slider.create({ data: sliderData });
 
-}
-async getAllSlider(){
-  return await prisma.slider.findMany();
+  }
+  async getAllSlider() {
+    return await prisma.slider.findMany();
 
-}
-
-
+  }
 
 
 
+  /**
+   * Social Repository - Handles CRUD operations for Social management.
+   */
 
 
+  async createSocial(platform, url, isActive) {
+    return await prisma.social.create({
+      data: {
+        id: uuidv4(),
+        platform: platform.toLowerCase(),
+        url,
+        isActive: isActive !== undefined ? isActive : true,
+      },
+    });
+  }
 
+  async updateSocial(id, platform, url, isActive, existingSocial) {
+    return await prisma.social.update({
+      where: { id },
+      data: {
+        platform: platform === undefined ? existingSocial.platform : platform,
+        url: url !== undefined ? url : existingSocial.url,
+        isActive: isActive !== undefined ? isActive : existingSocial.isActive,
+        updatedAt: new Date()
+      }
+    });
+  }
+
+  async getAllSocials() {
+    return await prisma.social.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async deleteSocial(id) {
+    return await prisma.social.delete({
+      where: { id }
+    });
+  }
+
+  async findSocialById(id) {
+    return await prisma.social.findUnique({
+      where: {
+        id
+      },
+    });
+  }
+  async findFirstSocial(platform) {
+    return await prisma.social.findFirst({
+      where: { platform: platform.toLowerCase() },
+    });
+  }
 
 
 
