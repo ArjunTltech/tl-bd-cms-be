@@ -1,9 +1,9 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import adminRoute from './routes/admin/indexRoute.js'
-import webRoute from './routes/web/indexRoute.js'
+import adminRoute from './src/routes/admin/indexRoute.js'
+import webRoute from './src/routes/web/indexRoute.js'
 import cors from 'cors'
-import errorHandler from './middlewares/errorHandler.js'
+import errorHandler from './src/middlewares/errorHandler.js'
 // import dbConnectionCheck from './middlewares/dbConnectionCheck.js'
 
 dotenv.config()
