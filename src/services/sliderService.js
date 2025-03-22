@@ -40,7 +40,7 @@ class SliderService {
           
             if(req.file){
            
-                const folderPath = 'bd/settings';
+                const folderPath = 'bd/slider';
                 const result = await imageUploadToCloudinary(req.file, folderPath);
                 sliderDetails.image = result.secure_url;
 
