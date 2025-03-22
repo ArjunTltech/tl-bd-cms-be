@@ -6,8 +6,8 @@ class SliderController {
     
     async addSlider(req,res){
         try {            
-            const {heading, subheading, tagline,description} =req.body
-            const response = await this.#sliderService.createSlider(heading, subheading, tagline,description,req) 
+            const {heading, subheading, tagline,description,category,order} =req.body
+            const response = await this.#sliderService.createSlider(heading, subheading, tagline,description,req,category,order) 
           
             return res.status(response.status).json(response);
             
@@ -22,9 +22,9 @@ class SliderController {
     }
     async editSlider(req,res){
         try {            
-            const {heading, subheading, tagline,description,image} =req.body
+            const {heading, subheading, tagline,description,category,order} =req.body
            const sliderId = req.params.id            
-           const response = await this.#sliderService.editSlider(heading, subheading, tagline,description,req,image,sliderId) 
+           const response = await this.#sliderService.editSlider(heading, subheading, tagline,description,req,sliderId,category,order) 
           
             return res.status(response.status).json(response);
             

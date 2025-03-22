@@ -6,10 +6,9 @@ class OrganizationDetailsController {
     
     async addOrganization(req,res){
         try {
-           console.log(req.body);
            
-            const {email, companyName, logo, phoneNumber} =req.body
-            const response = await this.#organizationDetailsService.createOrganizationDetails(email, companyName, logo, phoneNumber,req) 
+            const {email, companyname, phone} =req.body
+            const response = await this.#organizationDetailsService.createOrganizationDetails(email, companyname, phone,req) 
             return res.status(response.status).json(response);
             
         } catch (error) {
