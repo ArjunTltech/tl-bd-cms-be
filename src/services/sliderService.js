@@ -5,13 +5,13 @@ class SliderService {
     constructor(reposistorys) {
         this.#reposistorys = reposistorys
     }
-    async createSlider(heading, subheading, tagline,description,req) {
+    async createSlider(heading, subheading, tagline,description,req,category,order) {
         try {
             if (!heading ||!tagline||!description||!req.file) {
                 return { status: 400, message: "All fields Required" }
             }
             const sliderDetails = {
-                heading, subheading, tagline,description
+                heading, subheading, tagline,description,category,order:parseInt(order)
             }
             const folderPath = 'bd/slider';
             const result = await imageUploadToCloudinary(req.file, folderPath);
@@ -29,13 +29,13 @@ class SliderService {
             throw error
         }
     }
-    async editSlider(heading, subheading, tagline,description,req,image,id) {
+    async editSlider(heading, subheading, tagline,description,req,id,category,order) {
         try {
-            if (!heading ||!tagline||!description) {
+            if (!heading ||!tagline||!description||!order) {
                 return { status: 400, message: "All fields Required" }
             }
             const sliderDetails = {
-                heading, subheading, tagline,description
+                heading, subheading, tagline,description,category,order:parseInt(order)
             }
           
             if(req.file){

@@ -5,13 +5,15 @@ class OrganizationDetails {
     constructor(reposistorys) {
         this.#reposistorys = reposistorys
     }
-    async createOrganizationDetails(email, companyName, phoneNumber,req) {
+    async createOrganizationDetails(email, companyname, phone,req) {
         try {
-            if (!email || !req.file) {
+            console.log(email, companyname, phone);
+            
+            if (!email|| !companyname||!phone) {
                 return { status: 400, message: "All fields Required" }
             }
             const orgationDetails = {
-                email, companyName, logo, phoneNumber
+                email, companyName:companyname, phoneNumber:phone
             }
             const folderPath = 'bd/organization';
             const result = await imageUploadToCloudinary(req.file, folderPath);
