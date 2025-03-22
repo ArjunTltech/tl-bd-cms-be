@@ -8,5 +8,11 @@ model Enquiry {
   service     String
   message     String
   products    String
+  status      String   @default("unread")
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
 }
