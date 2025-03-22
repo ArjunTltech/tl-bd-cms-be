@@ -1,17 +1,20 @@
-/*
-  Warnings:
-
-  - You are about to drop the column `content` on the `Slider` table. All the data in the column will be lost.
-  - Added the required column `description` to the `Slider` table without a default value. This is not possible if the table is not empty.
-
-*/
 BEGIN TRY
 
 BEGIN TRAN;
 
--- AlterTable
-ALTER TABLE [dbo].[Slider] DROP COLUMN [content];
-ALTER TABLE [dbo].[Slider] ADD [description] NVARCHAR(1000) NOT NULL;
+-- CreateTable
+CREATE TABLE [dbo].[Client] (
+    [id] NVARCHAR(1000) NOT NULL,
+    [name] NVARCHAR(1000) NOT NULL,
+    [logo] NVARCHAR(1000),
+    [website] NVARCHAR(1000) NOT NULL,
+    [description] TEXT,
+    [isActive] BIT NOT NULL CONSTRAINT [Client_isActive_df] DEFAULT 1,
+    [order] INT,
+    [createdAt] DATETIME2 NOT NULL CONSTRAINT [Client_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
+    [updatedAt] DATETIME2 NOT NULL,
+    CONSTRAINT [Client_pkey] PRIMARY KEY CLUSTERED ([id])
+);
 
 -- CreateTable
 CREATE TABLE [dbo].[Social] (

@@ -1,8 +1,11 @@
 model Slider {
-  id          String @id @default(uuid())
+  id          String   @id @default(uuid())
   heading     String
-  subheading  String? 
+  subheading  String?
   tagline     String
   image       String
-  description String  
+  description String
+  category    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
