@@ -37,6 +37,10 @@ class AuthService {
       if (!email) {
         throw { status: 400, message: "Email is required." };
       }
+      const user = await this.#repository.findUserByEmail(email);
+      if (!user) {
+        return { status: 401, message: "User not found." };
+      }
       let otp = Math.floor(100000 + Math.random() * 900000);
       console.log(otp);
 

@@ -7,7 +7,6 @@ class OrganizationDetails {
     }
     async createOrganizationDetails(email, companyname, phone,req) {
         try {
-            console.log(email, companyname, phone);
             
             if (!email|| !companyname||!phone) {
                 return { status: 400, message: "All fields Required" }
@@ -25,6 +24,33 @@ class OrganizationDetails {
                 return { success: false, status: 500, message: "Failed to save Organization" }
             }
             return { success: true, status: 201, message: "Organization created successfully" }
+
+        } catch (error) {
+            console.error("Error in OrganizationService:", error.message || error);
+            throw error
+        }
+    }
+    async editOrganization(email, companyname, phone,req,organizationId) {
+        try {
+            if (!email ||!companyname||!phone) {
+                return { status: 400, message: "All fields Required" }
+            }
+            const organizationDetails = {
+                email,companyName: companyname, phoneNumber:phone
+            }
+          
+            if(req.file){
+           
+                const folderPath = 'bd/organization';
+                const result = await imageUploadToCloudinary(req.file, folderPath);
+                organizationDetails.logo = result.secure_url;
+
+            }
+            const organization = await this.#reposistorys.editOrganization(organizationId,organizationDetails)
+            if (!organization) {
+                return { success: false, status: 500, message: "Failed to update Organization" }
+            }
+            return { success: true, status: 201, message: "Organization updated successfully" }
 
         } catch (error) {
             console.error("Error in OrganizationService:", error.message || error);

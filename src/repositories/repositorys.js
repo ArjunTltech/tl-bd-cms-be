@@ -82,6 +82,13 @@ class Repositorys {
       where: { id: enquiryId },
     })
   }
+  async  filterEnquiry(filters) {
+  return await prisma.enquiry.findMany({
+    where: filters,
+    orderBy: { createdAt: 'desc' },
+  });
+}
+
 
   /**
    * OrganizationDetails Repository - Handles CRUD operations for OrganizationDetails management.
@@ -96,6 +103,12 @@ class Repositorys {
 
     return await prisma.organizationDetails.findMany();
   }
+  async editOrganization(organizationId, organizationDetails) {
+    return await prisma.organizationDetails.update({
+      where: { id: organizationId },
+      data: organizationDetails,
+    });
+  }
 
 
   /**
@@ -107,7 +120,11 @@ class Repositorys {
 
   }
   async getAllSlider() {
-    return await prisma.slider.findMany();
+    return await prisma.slider.findMany({
+      orderBy:{
+        order:'asc'
+      }
+    });
 
   }
   async editSlider(sliderId, updatedData) {

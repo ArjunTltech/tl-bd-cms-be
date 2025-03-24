@@ -46,5 +46,44 @@ class EnquiryController {
             });
         }
     }
+    async exportEnquiries(req, res) {
+        try {
+          const { status, startDate, endDate, format: fileFormat } = req.query;      
+          const response = await this.#enquiryService.filterEnquiry(
+            status,
+            startDate,
+            endDate,
+            fileFormat
+          );
+      
+          if (response.status !== 200) {
+            return res.status(response.status).json(response);
+          }
+      
+          // Set headers and send file based on format
+          if (response.format === 'excel') {
+            res.setHeader(
+              'Content-Type',
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            );
+            res.setHeader(
+              'Content-Disposition',
+              'attachment; filename=enquiries.xlsx'
+            );
+          } else if (response.format === 'pdf') {
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader(
+              'Content-Disposition',
+              'attachment; filename=enquiries.pdf'
+            );
+          }
+      
+          res.send(response.file);
+        } catch (error) {
+          console.error('Error exporting enquiries:', error);
+          res.status(500).json({ error: 'Failed to export enquiries' });
+        }
+      }
+      
 }
 export default EnquiryController
