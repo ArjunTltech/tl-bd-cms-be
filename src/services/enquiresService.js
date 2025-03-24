@@ -1,3 +1,6 @@
+import { generatePdfReport } from "../utils/pdf.js"
+import {format} from 'date-fns'
+import ExcelJS from 'exceljs'
 class EnquiresService{
     #reposistorys
     constructor(reposistorys){
@@ -47,5 +50,74 @@ class EnquiresService{
       throw error
         }
     }
+    async filterEnquiry(status, startDate, endDate, fileFormat) {
+      try {
+        const filters = {};
+    
+        if (status) {
+          filters.status = status;
+        }
+    
+        if (startDate || endDate) {
+          filters.createdAt = {};
+          if (startDate) {
+            filters.createdAt.gte = new Date(startDate);
+          }
+          if (endDate) {
+            filters.createdAt.lte = new Date(endDate);
+          }
+        }
+    
+        const enquiries = await this.#reposistorys.filterEnquiry(filters);
+    
+        if (fileFormat === 'excel') {
+          // Export as Excel
+          const workbook = new ExcelJS.Workbook();
+          const worksheet = workbook.addWorksheet('Enquiries');
+    
+          worksheet.columns = [
+            { header: 'Name', key: 'name', width: 20 },
+            { header: 'Email', key: 'email', width: 25 },
+            { header: 'Phone Number', key: 'phoneNumber', width: 15 },
+            { header: 'Country', key: 'country', width: 20 },
+            { header: 'Business', key: 'business', width: 20 },
+            { header: 'Products', key: 'products', width: 20 },
+            { header: 'Service', key: 'service', width: 20 },
+            { header: 'Message', key: 'message', width: 40 },
+            { header: 'Status', key: 'status', width: 10 },
+            { header: 'Date', key: 'createdAt', width: 20 },
+          ];
+    
+          enquiries.forEach((enquiry) => {
+            worksheet.addRow({
+              name: enquiry.name,
+              email: enquiry.email,
+              phoneNumber: enquiry.phoneNumber,
+              country: enquiry.country,
+              business: enquiry.business,
+              products: enquiry.products,
+              service: enquiry.service,
+              message: enquiry.message,
+              status: enquiry.status,
+              createdAt: format(new Date(enquiry.createdAt), 'dd MMM yyyy'),
+            });
+          });
+    
+          const buffer = await workbook.xlsx.writeBuffer();
+          return { status: 200, file: buffer, format: 'excel' };
+        }
+    
+        if (fileFormat === 'pdf') {
+          const pdfBuffer = await generatePdfReport(enquiries, startDate, endDate);
+          return { status: 200, file: pdfBuffer, format: 'pdf' };
+        }
+    
+        return { status: 400, message: 'Invalid format specified' };
+      } catch (error) {
+        console.error("Error in EnquiryService:", error.message || error);
+        throw error;
+      }
+    }
+    
 }
 export default EnquiresService
