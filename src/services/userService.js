@@ -13,21 +13,21 @@ class UserService {
 
   async createUserService(name, email, password, confirmPassword, role) {
     if (!name || !email || !password || !confirmPassword || !role) {
-      return { success: false, status: 400, message: "Please provide all required fields" };
+      return { success: false, status: 404, message: "Please provide all required fields" };
     }
     if (password.length < 6) {
-      return { success: false, status: 400, message: "Password must be at least 6 characters long" };
+      return { success: false, status: 404, message: "Password must be at least 6 characters long" };
     }
     if (password !== confirmPassword) {
-      return { success: false, status: 400, message: "Passwords do not match" };
+      return { success: false, status: 404, message: "Passwords do not match" };
     }
     if (![UserType.ADMIN, UserType.SUPER_ADMIN].includes(role)) {
-      return { success: false, status: 400, message: "Invalid role" };
+      return { success: false, status: 404, message: "Invalid role" };
     }
 
     const userExists = await this.#repositorys.findUserByEmail(email);
     if (userExists) {
-      return { success: false, status: 400, message: "Email already exists" };
+      return { success: false, status: 404, message: "Email already exists" };
     }
     const hashedPassword = await argon2.hash(password);
 
@@ -60,19 +60,19 @@ class UserService {
 async updateUserService(id,name,email,role){
   try {
     if (!name || !email || !role) {
-      return res.status(400).json({ message: "Please provide all the required fields" });
+      return res.status(404).json({ message: "Please provide all the required fields" });
   }
   
   if (![UserType.ADMIN, UserType.SUPER_ADMIN].includes(role)) {
-      return res.status(400).json({ message: "Invalid role" });
+      return res.status(404).json({ message: "Invalid role" });
   }
     const userById = await this.#repositorys.findUserById(id)
     if(!userById){
-      return { success: false, status: 400, message: "User not found" };  
+      return { success: false, status: 404, message: "User not found" };  
     }
     const user = await this.#repositorys.updateUser(id,name,email,role)
     if(!user){
-      return { success: false, status: 400, message: "Failed to Update User" };  
+      return { success: false, status: 404, message: "Failed to Update User" };  
     }
     return { success: true, status: 200, message: "User updated successfully",            user: {
       id: user.id,
@@ -90,16 +90,16 @@ async updateUserService(id,name,email,role){
 async deleteUserService(id){
   try {
     if(!id){
-      return { success: false, status: 400, message: "Failed to get Id" };  
+      return { success: false, status: 404, message: "Failed to get Id" };  
     }
     const userById = await this.#repositorys.findUserById(id)
     if (!userById) {
-      return { success: false, status: 400, message: "User not found" };  
+      return { success: false, status: 404, message: "User not found" };  
     }
     
     const user = await this.#repositorys.deleteUser(id)
     if (!user) {
-      return { success: false, status: 400, message: "Failed to delete user" };  
+      return { success: false, status: 404, message: "Failed to delete user" };  
     }
     return { success: true, status: 200, message: "User deleted successfully " };  
     

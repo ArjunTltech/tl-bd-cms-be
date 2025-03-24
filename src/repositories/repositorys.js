@@ -197,6 +197,56 @@ class Repositorys {
 
 
 
+    /**
+   * Client Repository - Handles CRUD operations for Client management.
+   */
+ async createClient(clientDetails){
+  return await prisma.client.create({
+    // data: {
+    //     id: uuidv4(),
+    //     clientDetails
+    // }
+    data: clientDetails
+});
+ }
+
+
+async getAllClients(){
+  return await prisma.client.findMany({
+    orderBy: {
+        order: 'asc'
+    }
+});
+}
+
+
+async updateClient(id,updateData){
+  return await prisma.client.update({
+    where: { id },
+    data: updateData
+});
+}
+
+
+async deleteClient(id){
+  return await prisma.client.delete({
+    where: { id }
+});
+
+}
+
+async findClientById(id){
+  return await prisma.client.findUnique({
+    where: { id }
+});
+}
+
+
+
+
+
+
+
 }
 
 export default Repositorys;
