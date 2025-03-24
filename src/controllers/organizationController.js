@@ -33,5 +33,22 @@ class OrganizationDetailsController {
             });
         }
     }
+    async editOrganization(req,res){
+        try {            
+            const {email, companyname, phone} =req.body            
+           const organizationId = req.params.id                       
+           const response = await this.#organizationDetailsService.editOrganization(email, companyname, phone,req,organizationId) 
+          
+            return res.status(response.status).json(response);
+            
+        } catch (error) {
+            console.error("Error in OrganizationController:", error.message || error);
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+              success: false,
+              message: error.message || "Internal server error.",
+            });
+        }
+    }
 }
 export default OrganizationDetailsController
