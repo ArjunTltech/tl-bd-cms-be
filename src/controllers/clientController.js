@@ -9,8 +9,6 @@ class ClientController {
         try {
             const { name, website,description, order,isActive } = req.body;
             const logo = req.file;
-            console.log(req.body,"bodyyy");
-            console.log(req.file,"filee");
             const response = await this.#ClientService.createClientService(name, website,logo, description, order,isActive,req)
             return res.status(response.status).json(response);
 
