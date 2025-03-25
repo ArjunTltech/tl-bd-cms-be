@@ -214,7 +214,7 @@ class Repositorys {
 async getAllClients(){
   return await prisma.client.findMany({
     orderBy: {
-      createdAt: 'asc'
+        order: 'asc'
     }
 });
 }
@@ -242,9 +242,127 @@ async findClientById(id){
 }
 
 
+    /**
+   * Stats Repository - Handles CRUD operations for Stats management.
+   */
 
 
+// Get-All Counts
 
+async safeCount(model) {
+  try {
+      // Dynamically access the Prisma model
+      if (!prisma[model]) {
+          console.error(`Model ${model} not found in Prisma client`);
+          return 0;
+      }
+      return await prisma[model].count();
+  } catch (error) {
+      console.error(`Error counting ${model}:`, error);
+      return 0;
+  }
+}
+
+// Safely wrap conditional count operations
+async safeConditionalCount(model, condition = {}) {
+  try {
+      if (!prisma[model]) {
+          console.error(`Model ${model} not found in Prisma client`);
+          return 0;
+      }
+      return await prisma[model].count({ where: condition });
+  } catch (error) {
+      console.error(`Error counting ${model} with condition:`, error);
+      return 0;
+  }
+}
+
+async getTotalClients() {
+  return this.safeCount('client');
+}
+
+async getActiveClients() {
+  return this.safeConditionalCount('client', { isActive: true });
+}
+
+async getTotalBlogs() {
+  return this.safeCount('blog');
+}
+
+async getTotalServices() {
+  return this.safeCount('service');
+}
+
+async getTotalUsers() {
+  return this.safeCount('user');
+}
+
+async getTotalFaqs() {
+  return this.safeCount('fAQ');
+}
+
+async getTotalTestimonials() {
+  return this.safeCount('testimonial');
+}
+
+async getTotalCatalogues() {
+  return this.safeCount('catalogue');
+}
+
+async getActiveCatalogues() {
+  return this.safeConditionalCount('catalogue', { isActive: true });
+}
+
+async getUnreadEnquiries() {
+  return this.safeConditionalCount('enquiries', { status: "unread" });
+}
+
+async getTotalEnquiries() {
+  return this.safeCount('enquiries');
+}
+
+async getTotalNewsletterSubscribers() {
+  return this.safeCount('newsletter');
+}
+
+async getUnreadNotifications() {
+  return this.safeConditionalCount('notification', { isRead: false });
+}
+
+async getActiveSocialLinks() {
+  return this.safeConditionalCount('social', { isActive: true });
+}
+
+async getActiveTeamMembers() {
+  return this.safeConditionalCount('team', { isActive: true });
+}
+
+async getEnquiriesLast7Days() {
+  try {
+      const today = new Date();
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(today.getDate() - 7);
+
+      const enquiries = await prisma.enquiries.findMany({
+          where: {
+              createdAt: {
+                  gte: sevenDaysAgo,
+              },
+          },
+      });
+
+      const groupedData = {};
+      enquiries.forEach((enquiry) => {
+          const date = enquiry.createdAt.toISOString().split("T")[0];
+          groupedData[date] = (groupedData[date] || 0) + 1;
+      });
+
+      return groupedData;
+  } catch (error) {
+      console.error("Error fetching enquiries:", error);
+      return {};
+  }
+}
 
 
 }
