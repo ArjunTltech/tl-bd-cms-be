@@ -214,7 +214,7 @@ class Repositorys {
 async getAllClients(){
   return await prisma.client.findMany({
     orderBy: {
-        order: 'asc'
+      createdAt: 'asc'
     }
 });
 }
