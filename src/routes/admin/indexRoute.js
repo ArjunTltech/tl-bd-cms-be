@@ -7,6 +7,7 @@ import sliderRoute from './sliderRoute.js'
 import socialRoute from './socialRoute.js'
 import clientRoutes from './clientRoute.js'
 import statsRoutes from './StatsRoute.js'
+import seoRoutes from './seoRoute.js'
 const router = express.Router()
 
 
@@ -18,6 +19,8 @@ router.use('/slider', sliderRoute)
 router.use('/social', socialRoute)
 router.use("/client", clientRoutes);
 router.use("/stats", statsRoutes);
+router.use("/seo", seoRoutes);
+
 
 
 
