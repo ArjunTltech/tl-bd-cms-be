@@ -1,5 +1,6 @@
 import * as argon2 from "argon2";
 import generateJwtToken from "../utils/gnerateJWTToken.js";
+import { sendOtpEmail } from "../utils/emailService.js";
 
 class AuthService {
   #repository
@@ -32,8 +33,10 @@ class AuthService {
       throw error;
     }
   }
-  async resetPassword(email) {
+  async forgetPassword(email) {
     try {
+      // let del =  await this.#repository.deleteOtp(email)
+      // console.log(del);
       if (!email) {
         throw { status: 400, message: "Email is required." };
       }
@@ -42,15 +45,96 @@ class AuthService {
         return { status: 401, message: "User not found." };
       }
       let otp = Math.floor(100000 + Math.random() * 900000);
-      console.log(otp);
 
-      return otp
+      const sentOtp = await sendOtpEmail(email, otp)
+      const saveOtp = await this.#repository.saveOtp(email, otp)
+      if (!sentOtp || !saveOtp) {
+        return { status: 400, message: "Failed to send OTP" };
+      }
+      return { status: 200, success: true, message: "OTP sent successfully" };
+
     } catch (error) {
       console.error("Error in AuthService:", error.message || error);
       throw error
 
     }
   }
+
+  async verifyOtp(email, otp) {
+    try {
+      if (!email || !otp) {
+        return { status: 400, message: "Please provide all the required fields" };
+      }
+      const existingOTP = await this.#repository.verifyOtp(email)
+      if (!existingOTP) {
+        return { status: 400, message: "No OTP found for this email", success: false };
+      }
+      if (existingOTP.isVerified === true) {
+        return { status: 400, message: "OTP has expired", success: false }
+      }
+      if (existingOTP.expiresAt < new Date()) {
+        return { status: 400, message: "OTP has expired", success: false }
+
+      }
+      if (existingOTP.otp !== otp) {
+        return { status: 400, message: "Invalid OTP", success: false }
+      }
+      const update = await this.#repository.updateOtp(email)
+      // let del =  await this.#repository.deleteOtp(email)
+
+      return {
+        status: 200,
+        message: "OTP verified successfully, you can now reset your password",
+        success: true,
+      };
+    } catch (error) {
+      console.error("Error in AuthService:", error.message || error);
+      throw error
+    }
+  }
+
+  async resetPassword(email, newPassword, confirmNewPassword) {
+    try {
+      if (!email || !newPassword || !confirmNewPassword) {
+        return {
+          status: 400,
+          message: "Please provide all the required fields",
+          success: false,
+        };
+      }
+      if (newPassword.length < 6) {
+        return { status: 400, message: "Password must be at least 6 characters long", success: false };
+      }
+      if (newPassword !== confirmNewPassword) {
+        return {
+          status: 400,
+          message: "New passwords do not match",
+          success: false,
+        };
+      }
+      const isOtpVerified = await this.#repository.verifyOtp(email)
+      if (!isOtpVerified.isVerified) {
+        return {
+          status: 400,
+          message: "Please verify your OTP first",
+          success: false,
+        };
+      }
+      const hashedPassword = await argon2.hash(newPassword);
+      const updateUser = await this.#repository.updateUserPassword(email, hashedPassword)
+      let del = await this.#repository.deleteOtp(email)
+
+      return {
+        status: 200,
+        message: 'Password reset successfully',
+        success: true,
+      };
+    } catch (error) {
+      console.error("Error in AuthService:", error.message || error);
+      throw error
+    }
+  }
+
 }
 
 export default AuthService

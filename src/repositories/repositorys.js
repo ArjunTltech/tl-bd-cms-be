@@ -27,6 +27,17 @@ class Repositorys {
     });
   }
 
+  async updateUserPassword(email,password){
+    return await prisma.user.update({
+      where:{
+        email:email
+      },
+      data:{
+        password
+      }
+    })
+  }
+
   async getAllUsers() {
     return await prisma.user.findMany({
       select: {
@@ -82,12 +93,12 @@ class Repositorys {
       where: { id: enquiryId },
     })
   }
-  async  filterEnquiry(filters) {
-  return await prisma.enquiry.findMany({
-    where: filters,
-    orderBy: { createdAt: 'desc' },
-  });
-}
+  async filterEnquiry(filters) {
+    return await prisma.enquiry.findMany({
+      where: filters,
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 
 
   /**
@@ -121,8 +132,8 @@ class Repositorys {
   }
   async getAllSlider() {
     return await prisma.slider.findMany({
-      orderBy:{
-        order:'asc'
+      orderBy: {
+        order: 'asc'
       }
     });
 
@@ -197,54 +208,107 @@ class Repositorys {
 
 
 
-    /**
-   * Client Repository - Handles CRUD operations for Client management.
-   */
- async createClient(clientDetails){
-  return await prisma.client.create({
-    // data: {
-    //     id: uuidv4(),
-    //     clientDetails
-    // }
-    data: clientDetails
-});
- }
+  /**
+ * Client Repository - Handles CRUD operations for Client management.
+ */
+  async createClient(clientDetails) {
+    return await prisma.client.create({
+      // data: {
+      //     id: uuidv4(),
+      //     clientDetails
+      // }
+      data: clientDetails
+    });
+  }
 
 
-async getAllClients(){
-  return await prisma.client.findMany({
-    orderBy: {
-      createdAt: 'asc'
-    }
-});
-}
+  async getAllClients() {
+    return await prisma.client.findMany({
+      orderBy: {
+        order: 'asc'
+      }
+    });
+  }
 
 
-async updateClient(id,updateData){
-  return await prisma.client.update({
-    where: { id },
-    data: updateData
-});
-}
+  async updateClient(id, updateData) {
+    return await prisma.client.update({
+      where: { id },
+      data: updateData
+    });
+  }
 
 
-async deleteClient(id){
-  return await prisma.client.delete({
-    where: { id }
-});
+  async deleteClient(id) {
+    return await prisma.client.delete({
+      where: { id }
+    });
 
-}
+  }
 
-async findClientById(id){
-  return await prisma.client.findUnique({
-    where: { id }
-});
-}
+  async findClientById(id) {
+    return await prisma.client.findUnique({
+      where: { id }
+    });
+  }
+  async seoCreation(pageTitle, data) {
+    return await prisma.sEO.upsert({
+      where: {
+        pageTitle: pageTitle,
+      },
+      update: {
+        ...data,
+      },
+      create: {
+        pageTitle: pageTitle,
+        ...data,
+      },
+    });
+  }
+  async getSeo(pageTitle) {
+    return await prisma.sEO.findUnique({
+      where: {
+        pageTitle: pageTitle,
+      },
+    });
+  }
 
+  async saveOtp(email, otp) {
+    return await prisma.otp.create({
+      data: {
+        email: email,
+        otp: otp.toString(),
+        expiresAt: new Date(Date.now() + 5 * 60 * 1000),
+        isVerified: false
+      },
+    });
+  }
 
+  async verifyOtp(email) {
+    return await prisma.otp.findUnique({
+      where: {
+        email: email,
+      },
+    });
+  }
+  async updateOtp(email) {
+    await prisma.otp.update({
+      where: {
+        email: email,
+      },
+      data: {
+        isVerified: true
+      },
+    });
 
-
-
+  }
+  async deleteOtp(email){
+    return prisma.otp.delete({
+      where:{
+        email:email
+      }
+    })
+  }
 
 
 }
