@@ -1,6 +1,6 @@
 import * as argon2 from "argon2";
 import generateJwtToken from "../utils/gnerateJWTToken.js";
-import { sendOtpEmail } from "../utils/emailService.js";
+import { emailTemplates, sendEmail } from "../utils/emailService.js";
 
 class AuthService {
   #repository
@@ -36,7 +36,6 @@ class AuthService {
   async forgetPassword(email) {
     try {
       // let del =  await this.#repository.deleteOtp(email)
-      // console.log(del);
       if (!email) {
         throw { status: 400, message: "Email is required." };
       }
@@ -46,7 +45,11 @@ class AuthService {
       }
       let otp = Math.floor(100000 + Math.random() * 900000);
 
-      const sentOtp = await sendOtpEmail(email, otp)
+      const sentOtp = await sendEmail({
+        to: email,
+        subject: "Password Reset OTP",
+        html: emailTemplates.sendOTP(user.name, otp)
+      })      
       const saveOtp = await this.#repository.saveOtp(email, otp)
       if (!sentOtp || !saveOtp) {
         return { status: 400, message: "Failed to send OTP" };
@@ -103,7 +106,7 @@ class AuthService {
         };
       }
       if (newPassword.length < 6) {
-        return { status: 400, message: "Password must be at least 6 characters long", success: false };
+        return { status: 400, message:"Password must be at least 6 characters long", success: false };
       }
       if (newPassword !== confirmNewPassword) {
         return {
@@ -121,9 +124,15 @@ class AuthService {
         };
       }
       const hashedPassword = await argon2.hash(newPassword);
+      const user = await this.#repository.findUserByEmail(email)
       const updateUser = await this.#repository.updateUserPassword(email, hashedPassword)
       let del = await this.#repository.deleteOtp(email)
-
+      
+     await sendEmail({
+        to: user.email,
+        subject: "Password Reset Successful",
+        html: emailTemplates.passwordResetSuccess(user.name)
+    });
       return {
         status: 200,
         message: 'Password reset successfully',
