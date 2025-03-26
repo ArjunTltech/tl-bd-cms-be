@@ -28,10 +28,13 @@ class SocialService {
     async getAllSocialService() {
         try {
             const socials = await this.#repositorys.getAllSocials()
-            if (!socials) {
+            if (!socials || socials.length === 0) {
                 return { status: 400, message: "Social Medias not found" };
             }
-            return { status: 200, message: `Social media fetched successfully`, data: socials, };
+
+            const activeSocials = socials.filter(social => social.isActive).length;
+
+            return { status: 200, message: `Social media fetched successfully`, data: socials, activeCount: activeSocials };
         } catch (error) {
             console.error("Error in getAllSocialService:", error.message || error);
             throw error

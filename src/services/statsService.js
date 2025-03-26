@@ -9,35 +9,21 @@ class StatsService {
         const [
             totalClients,
             activeClients,
-            totalBlogs,
-            totalServices,
+            totalSliders,
             totalUser,
-            totalFaq,
-            totalTestimonials,
-            totalCatalogues,
-            activeCatalogues,
             unreadEnquiries,
             totalEnquiries,
-            totalNewsletterSubscribers,
             unreadNotifications,
             activeSocialLinks,
-            activeTeamMembers
         ] = await Promise.all([
             this.#repositorys.getTotalClients(),
             this.#repositorys.getActiveClients(),
-            this.#repositorys.getTotalBlogs(),
-            this.#repositorys.getTotalServices(),
+            this.#repositorys.getTotalSliders(),
             this.#repositorys.getTotalUsers(),
-            this.#repositorys.getTotalFaqs(),
-            this.#repositorys.getTotalTestimonials(),
-            this.#repositorys.getTotalCatalogues(),
-            this.#repositorys.getActiveCatalogues(),
             this.#repositorys.getUnreadEnquiries(),
             this.#repositorys.getTotalEnquiries(),
-            this.#repositorys.getTotalNewsletterSubscribers(),
             this.#repositorys.getUnreadNotifications(),
             this.#repositorys.getActiveSocialLinks(),
-            this.#repositorys.getActiveTeamMembers()
         ]);
 
         return {
@@ -45,31 +31,15 @@ class StatsService {
                 total: totalClients,
                 active: activeClients
             },
-            blogs: {
-                total: totalBlogs
-            },
-            services: {
-                total: totalServices
+            sliders: {
+                total: totalSliders
             },
             users: {
                 total: totalUser
             },
-            faqs: {
-                total: totalFaq
-            },
-            testimonials: {
-                total: totalTestimonials
-            },
-            catalogues: {
-                total: totalCatalogues,
-                active: activeCatalogues
-            },
             enquiries: {
                 total: totalEnquiries,
                 unread: unreadEnquiries
-            },
-            newsletter: {
-                subscribers: totalNewsletterSubscribers
             },
             notifications: {
                 unread: unreadNotifications
@@ -77,9 +47,6 @@ class StatsService {
             social: {
                 active: activeSocialLinks
             },
-            team: {
-                active: activeTeamMembers
-            }
         };
     }
 
