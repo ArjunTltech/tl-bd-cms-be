@@ -111,7 +111,7 @@ class CategoryService {
         }
     }
 
-    async createProducts(productName) {
+    async createProduct(productName) {
         try {
             if (!productName) {
                 return { status: 400, message: "All fields Required" }

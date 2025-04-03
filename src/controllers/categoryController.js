@@ -66,6 +66,7 @@ class CategoryController {
     async createProduct(req, res) {
         try {
             const { product } = req.body
+            
             const response = await this.#categoryService.createProduct(product)
             return res.status(response.status).json(response);
 
@@ -80,7 +81,7 @@ class CategoryController {
     }
     async getProducts(req, res) {
         try {
-            const response = await this.#categoryService.getProducts()
+            const response = await this.#categoryService.getProducts()            
             return res.status(response.status).json(response);
 
         } catch (error) {
@@ -94,8 +95,10 @@ class CategoryController {
     }
     async  deleteBusiness(req,res){
         try {            
-            const businessId =req.params.id
+            const businessId =req.params.businessId            
             const response = await this.#categoryService.deleteBusiness(businessId)
+           console.log(response);
+           
             return res.status(response.status).json(response)
         } catch (error) {
             console.error("Error in CategoryController:", error.message || error);

@@ -427,7 +427,7 @@ class Repositorys {
   async createProducts(productsName) {
     return await prisma.products.create({
       data: {
-        product: productsName
+        products: productsName
       }
     })
   }
@@ -440,7 +440,7 @@ class Repositorys {
 
   }
   async getAllProducts() {
-    return await prisma.product.findMany();
+    return await prisma.products.findMany();
 
   }
 
@@ -461,7 +461,7 @@ class Repositorys {
     })
   }
   async editBusiness(businessId,businessName){
-    return await prisma.product.update({
+    return await prisma.products.update({
       where:{
         id:businessId
       },
@@ -477,7 +477,7 @@ class Repositorys {
     })
   }
   async deleteProduct(productId){
-    return await prisma.product.delete({
+    return await prisma.products.delete({
       where:{
         id:productId
       }
