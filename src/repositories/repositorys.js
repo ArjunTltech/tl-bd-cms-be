@@ -28,12 +28,12 @@ class Repositorys {
     });
   }
 
-  async updateUserPassword(email,password){
+  async updateUserPassword(email, password) {
     return await prisma.user.update({
-      where:{
-        email:email
+      where: {
+        email: email
       },
-      data:{
+      data: {
         password
       }
     })
@@ -219,13 +219,13 @@ class Repositorys {
   }
 
 
-async getAllClients(){
-  return await prisma.client.findMany({
-    orderBy: {
+  async getAllClients() {
+    return await prisma.client.findMany({
+      orderBy: {
         order: 'asc'
-    }
-});
-}
+      }
+    });
+  }
 
 
   async updateClient(id, updateData) {
@@ -251,9 +251,9 @@ async getAllClients(){
   }
 
 
-      /**
-   * SEO Repository - Handles CRUD operations for SEO management.
-   */
+  /**
+* SEO Repository - Handles CRUD operations for SEO management.
+*/
 
   async seoCreation(pageTitle, data) {
     return await prisma.sEO.upsert({
@@ -308,108 +308,189 @@ async getAllClients(){
     });
 
   }
-  async deleteOtp(email){
+  async deleteOtp(email) {
     return prisma.otp.delete({
-      where:{
-        email:email
+      where: {
+        email: email
       }
     })
   }
 
 
-   /**
-     * Stats Repository - Handles CRUD operations for Stats management
-     */
+  /**
+    * Stats Repository - Handles CRUD operations for Stats management
+    */
 
-    // Safe count method for any model
-    async safeCount(model) {
-      try {
-          // Dynamically access the Prisma model
-          if (!prisma[model]) {
-              console.error(`Model ${model} not found in Prisma client`);
-              return 0;
-          }
-          return await prisma[model].count();
-      } catch (error) {
-          console.error(`Error counting ${model}:`, error);
-          return 0;
+  // Safe count method for any model
+  async safeCount(model) {
+    try {
+      // Dynamically access the Prisma model
+      if (!prisma[model]) {
+        console.error(`Model ${model} not found in Prisma client`);
+        return 0;
       }
+      return await prisma[model].count();
+    } catch (error) {
+      console.error(`Error counting ${model}:`, error);
+      return 0;
+    }
   }
 
   // Safe conditional count method for any model
   async safeConditionalCount(model, condition = {}) {
-      try {
-          if (!prisma[model]) {
-              console.error(`Model ${model} not found in Prisma client`);
-              return 0;
-          }
-          return await prisma[model].count({ where: condition });
-      } catch (error) {
-          console.error(`Error counting ${model} with condition:`, error);
-          return 0;
+    try {
+      if (!prisma[model]) {
+        console.error(`Model ${model} not found in Prisma client`);
+        return 0;
       }
+      return await prisma[model].count({ where: condition });
+    } catch (error) {
+      console.error(`Error counting ${model} with condition:`, error);
+      return 0;
+    }
   }
 
   // Specific count methods
   async getTotalClients() {
-      return this.safeCount('client');
+    return this.safeCount('client');
   }
 
   async getActiveClients() {
-      return this.safeConditionalCount('client', { isActive: true });
+    return this.safeConditionalCount('client', { isActive: true });
   }
 
   async getTotalSliders() {
-      return this.safeCount('slider');
+    return this.safeCount('slider');
   }
 
   async getTotalUsers() {
-      return this.safeCount('user');
+    return this.safeCount('user');
   }
 
   async getUnreadEnquiries() {
-      return this.safeConditionalCount('enquiry', { status: "unread" });
+    return this.safeConditionalCount('enquiry', { status: "unread" });
   }
 
   async getTotalEnquiries() {
-      return this.safeCount('enquiry');
+    return this.safeCount('enquiry');
   }
 
   async getUnreadNotifications() {
-      return this.safeConditionalCount('notification', { isRead: false });
+    return this.safeConditionalCount('notification', { isRead: false });
   }
 
   async getActiveSocialLinks() {
-      return this.safeConditionalCount('social', { isActive: true });
+    return this.safeConditionalCount('social', { isActive: true });
   }
 
   async getEnquiriesLast7Days() {
-      try {
-          const today = new Date();
-          const sevenDaysAgo = new Date();
-          sevenDaysAgo.setDate(today.getDate() - 7);
+    try {
+      const today = new Date();
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(today.getDate() - 7);
 
-          const enquiries = await prisma.enquiry.findMany({
-              where: {
-                  createdAt: {
-                      gte: sevenDaysAgo,
-                  },
-              },
-          });
+      const enquiries = await prisma.enquiry.findMany({
+        where: {
+          createdAt: {
+            gte: sevenDaysAgo,
+          },
+        },
+      });
 
-          const groupedData = {};
-          enquiries.forEach((enquiry) => {
-              const date = enquiry.createdAt.toISOString().split("T")[0];
-              groupedData[date] = (groupedData[date] || 0) + 1;
-          });
+      const groupedData = {};
+      enquiries.forEach((enquiry) => {
+        const date = enquiry.createdAt.toISOString().split("T")[0];
+        groupedData[date] = (groupedData[date] || 0) + 1;
+      });
 
-          return groupedData;
-      } catch (error) {
-          console.error("Error fetching enquiries:", error);
-          return {};
-      }
+      return groupedData;
+    } catch (error) {
+      console.error("Error fetching enquiries:", error);
+      return {};
+    }
   }
 
+  async createBusiness(businessName) {
+
+    return await prisma.business.create({
+      data: {
+        business: businessName
+      }
+    })
+  }
+  async createService(serviceName) {
+    return await prisma.service.create({
+      data: {
+        service: serviceName
+      }
+    })
+  }
+  async createProducts(productsName) {
+    return await prisma.products.create({
+      data: {
+        products: productsName
+      }
+    })
+  }
+  async getAllBusiness() {
+    return await prisma.business.findMany();
+
+  }
+  async getAllServices() {
+    return await prisma.service.findMany();
+
+  }
+  async getAllProducts() {
+    return await prisma.products.findMany();
+
+  }
+
+  async editService(serviceId,serviceName){
+    return await prisma.service.update({
+      where:{
+        id:serviceId
+      },
+      data:{serviceName}
+    })
+  }
+  async editProduct(productId,productName){
+    return await prisma.product.update({
+      where:{
+        id:productId
+      },
+      data:{productName}
+    })
+  }
+  async editBusiness(businessId,businessName){
+    return await prisma.products.update({
+      where:{
+        id:businessId
+      },
+      data:{businessName}
+    })
+  }
+
+  async deleteService(serviceId){
+    return await prisma.service.delete({
+      where:{
+        id:serviceId
+      }
+    })
+  }
+  async deleteProduct(productId){
+    return await prisma.products.delete({
+      where:{
+        id:productId
+      }
+    })
+  }
+  async deleteBusiness(businessId){
+    return await prisma.business.delete({
+      where:{
+        id:businessId
+      }
+    })
+  }
 
   /**
      * Fetch active users data
