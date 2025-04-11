@@ -7,11 +7,11 @@ class NotificationService {
     async getAllNotifications() {
         try {
             const notification = await this.#reposistorys.getAllNotifications()
-           
+
             if (!notification) {
-                return {status:400, success: false, message: "Failed to load notification" }
+                return { status: 400, success: false, message: "Failed to load notification" }
             }
-            return { status:200,success: true, message: "Notification sent ", notification }
+            return { status: 200, success: true, message: "Notification sent ", notification }
         } catch (error) {
             console.error("Error in NotificationService:", error.message || error);
             throw error
@@ -32,7 +32,7 @@ class NotificationService {
         }
     }
 
-    async clearAllNotifications(){
+    async clearAllNotifications() {
         try {
             const notification = await this.#reposistorys.clearAllNotifications()
             if (notification) {
@@ -45,6 +45,18 @@ class NotificationService {
             throw error
         }
     }
+    async markAsRead(notificationId) {
+        try {
+            let markAsReadNotification = await this.#reposistorys.markReadAsNotification(notificationId)
+            if (markAsReadNotification) {
+                return { status: 400, message: 'Failed Notification to marked as read', success: true }
+            }
+            return { status: 200, message: 'Notification marked as read', success: true }
+
+        } catch (error) {
+            console.error("Error in NotificationService:", error.message || error);
+            throw error        }
+    };
 }
 
 export default NotificationService

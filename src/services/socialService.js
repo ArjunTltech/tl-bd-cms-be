@@ -42,6 +42,27 @@ class SocialService {
 
     }
 
+    async getAllActiveSocialService() {
+        try {
+            const socials = await this.#repositorys.getAllActiveSocials(); // updated method name
+    
+            if (!socials || socials.length === 0) {
+                return { status: 400, message: "No active social medias found" };
+            }
+    
+            return {
+                status: 200,
+                message: "Active social medias fetched successfully",
+                data: socials,
+                activeCount: socials.length,
+            };
+        } catch (error) {
+            console.error("Error in getAllSocialService:", error.message || error);
+            throw error;
+        }
+    }
+    
+
     async updateSocialService(id, platform, url, isActive) {
         try {
             if (!id || !platform || !url) {

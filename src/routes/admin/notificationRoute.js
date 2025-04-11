@@ -9,7 +9,7 @@ const router = express.Router();
 const notificationController = new NotificationController(new NotificationService(new Repositorys())); 
 
 router.get('/get-all-notifications',verifyJwtToken,(req,res)=>notificationController.getAllNotifications(req,res));
-// router.put('/mark-as-read/:id', verifyJwtToken,markAsRead);
+ router.put('/mark-as-read/:id', verifyJwtToken,(req,res)=>notificationController.markAsRead(req,res));
 // router.put('/mark-all-as-read',verifyJwtToken,markAllAsRead)
 router.delete('/delete/:id',verifyJwtToken,(req,res)=>notificationController.deleteNotification(req,res))
 router.delete('/clear-all-notifications',verifyJwtToken,(req,res)=>notificationController.clearAllNotifications(req,res));
