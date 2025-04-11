@@ -33,6 +33,21 @@ class SocialController {
         }
     }
 
+
+    async getAllWebSocials(req, res) {
+        try {
+            const response = await this.#SocialService.getAllActiveSocialService()
+            return res.status(response.status).json(response);
+        } catch (error) {
+            console.error("Error Fetching Socials:", error.message || error)
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+                success: false,
+                message: error.message || "Internal server error.",
+            });
+        }
+    }
+
     async updateSocial(req, res) {
         try {
             const { id } = req.params;
