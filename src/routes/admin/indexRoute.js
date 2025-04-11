@@ -10,6 +10,7 @@ import statsRoutes from './StatsRoute.js'
 import seoRoutes from './seoRoute.js'
 import categoryRoutes from './categoryRoute.js'
 import notificationRoutes from './notificationRoute.js'
+import TooltipRoutes from './tooltipRoute.js'
 const router = express.Router()
 
 
@@ -24,6 +25,7 @@ router.use("/stats", statsRoutes);
 router.use("/seo", seoRoutes);
 router.use("/category", categoryRoutes);
 router.use("/notification", notificationRoutes);
+router.use("/tooltips", TooltipRoutes);
 
 
 

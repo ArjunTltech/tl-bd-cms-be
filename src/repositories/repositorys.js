@@ -775,6 +775,54 @@ async fetchEventNameCounts(dateRange) {
   }
 }
 
+
+
+  /**
+    * Tooltip Repository - Handles CRUD operations for Tooltip management
+    */
+
+
+  async Upserttooltip(title, content, fieldType) {
+    return await prisma.tooltip.upsert({
+      where: { FieldType: fieldType },
+      update: {
+        title: title,
+        content: content,
+      },
+      create: {
+        title: title || null, // Make title optional
+        content: content,
+        FieldType: fieldType,
+      },
+    });
+  } 
+    
+
+async getTooltipByFieldType(fieldType) {
+  return await prisma.tooltip.findUnique({
+    where: { FieldType: fieldType },
+  });
+  }
+
+
+async getTooltip() {
+  return await prisma.tooltip.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 async  getAllNotifications(){
     return await prisma.notification.findMany({
       orderBy: {

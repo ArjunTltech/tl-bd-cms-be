@@ -7,17 +7,17 @@ class SocialService {
     async createSocialService(platform, url, isActive) {
         try {
             if (!url || !platform) {
-                return { status: 400, message: "Platform and URL are required fields" };
+                return { success: false,status: 400, message: "Platform and URL are required fields" };
             }
             const existingSocial = await this.#repositorys.findFirstSocial(platform);
             if (existingSocial) {
-                return { status: 400, message: `A social media entry for ${platform} already exists.` };
+                return { success: false,status: 400, message: `A social media entry for ${platform} already exists.` };
             }
             const social = await this.#repositorys.createSocial(platform, url, isActive);
             if (!social) {
-                return { status: 400, message: `Failed to create Social media entry` };
+                return { success: false,status: 400, message: `Failed to create Social media entry` };
             }
-            return { status: 201, message: `Social media entry created successfully`, data: social };
+            return { success: true, status: 201, message: `Social media entry created successfully`, data: social };
         } catch (error) {
             console.error("Error in CreateSocialService:", error.message || error);
             throw error;
@@ -29,12 +29,12 @@ class SocialService {
         try {
             const socials = await this.#repositorys.getAllSocials()
             if (!socials || socials.length === 0) {
-                return { status: 400, message: "Social Medias not found" };
+                return { success: false,status: 400, message: "Social Medias not found" };
             }
 
             const activeSocials = socials.filter(social => social.isActive).length;
 
-            return { status: 200, message: `Social media fetched successfully`, data: socials, activeCount: activeSocials };
+            return { success: true, status: 200, message: `Social media fetched successfully`, data: socials, activeCount: activeSocials };
         } catch (error) {
             console.error("Error in getAllSocialService:", error.message || error);
             throw error
@@ -47,10 +47,11 @@ class SocialService {
             const socials = await this.#repositorys.getAllActiveSocials(); // updated method name
     
             if (!socials || socials.length === 0) {
-                return { status: 400, message: "No active social medias found" };
+                return {success: false, status: 400, message: "No active social medias found" };
             }
     
             return {
+                success: true,
                 status: 200,
                 message: "Active social medias fetched successfully",
                 data: socials,
