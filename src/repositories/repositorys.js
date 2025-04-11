@@ -850,7 +850,7 @@ async  getAllNotifications(){
   }
 
   async clearAllNotifications(){
-    return await prisma.user.deleteMany({})
+    return await prisma.notification.deleteMany({})
   }
 
 
@@ -861,10 +861,14 @@ async  getAllNotifications(){
     });
   }
 
-  async markAllAsReadNotification(notificationId){
-    return await prisma.notification.update({
-      where: { notificationId },
-      data: { isRead: true },
+  async markAllAsReadNotification(){
+    return await prisma.notification.updateMany({
+      where: {
+        isRead: false
+      },
+      data: {
+        isRead: true
+      }
     });
   }
 }
