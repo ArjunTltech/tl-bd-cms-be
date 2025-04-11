@@ -1,0 +1,28 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- CreateTable
+CREATE TABLE [dbo].[Tooltip] (
+    [id] NVARCHAR(1000) NOT NULL,
+    [title] NVARCHAR(1000),
+    [content] TEXT NOT NULL,
+    [FieldType] NVARCHAR(1000) NOT NULL,
+    [createdAt] DATETIME2 NOT NULL CONSTRAINT [Tooltip_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
+    [updatedAt] DATETIME2 NOT NULL,
+    CONSTRAINT [Tooltip_pkey] PRIMARY KEY CLUSTERED ([id]),
+    CONSTRAINT [Tooltip_FieldType_key] UNIQUE NONCLUSTERED ([FieldType])
+);
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

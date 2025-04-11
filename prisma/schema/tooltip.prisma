@@ -1,0 +1,8 @@
+model Tooltip {
+    id        String   @id @default(uuid())
+    title     String?
+    content   String   @db.Text
+    FieldType String   @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
