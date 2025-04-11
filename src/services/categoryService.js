@@ -156,6 +156,72 @@ class CategoryService {
         }
     }
 
+    async editProduct(productId,productName) {
+        try {
+            if (!productName) {
+                return { status: 400, message: "All fields Required" }
+            }
+            const existProduct = await this.#repositorys.findProductById(productId)
+            
+            if(!existProduct){
+                return {success:false,status:400,message:"Product not found"}
+            }
+            const product = await this.#repositorys.editProduct(productId,productName)
+            if (!product) {
+                return { success: false, status: 500, message: "Failed to update product" }
+            }
+            return { success: true, status: 201, message: "Product updated successfully" }
+
+        } catch (error) {
+            console.error("Error in CategoryService:", error.message || error);
+            throw error
+        }
+    }
+    async editService(serviceId,serviceName) {
+        try {
+            if (!serviceName) {
+                return { status: 400, message: "All fields Required" }
+            }
+            const existService= await this.#repositorys.findServiceById(serviceId)
+            
+            if(!existService){
+                return {success:false,status:400,message:"Service not found"}
+            }
+            const service = await this.#repositorys.editService(serviceId,serviceName)
+            if (!service) {
+                return { success: false, status: 500, message: "Failed to update service" }
+            }
+            return { success: true, status: 201, message: "Service updated successfully" }
+
+        } catch (error) {
+            console.error("Error in CategoryService:", error.message || error);
+            throw error
+        }
+    }
+    async editBusiness(businessId, businessName) {
+        try {
+            if (!businessName) {
+                return { status: 400, message: "All fields Required" };
+            }
+            
+            const existBusiness = await this.#repositorys.findBusinessById(businessId);
+            
+            if (!existBusiness) {
+                return { success: false, status: 400, message: "Business not found" };
+            }
+            
+            const business = await this.#repositorys.editBusiness(businessId, businessName);
+            if (!business) {
+                return { success: false, status: 500, message: "Failed to update business" };
+            }
+            
+            return { success: true, status: 201, message: "Business updated successfully" };
+        } catch (error) {
+            console.error("Error in CategoryBusiness:", error.message || error);
+            throw error;
+        }
+    }
+    
 }
 
 export default CategoryService

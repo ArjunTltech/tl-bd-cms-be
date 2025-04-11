@@ -69,6 +69,55 @@ class UserController {
         }
     }
 
+    async getProfile(req, res) {
+        try {            
+            const id = req.user.id
+            const response = await this.#UserService.getProfile(id)
+            return res.status(response.status).json(response);
+        } catch (error) {
+
+            console.error("Error User:", error.message || error)
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+                success: false,
+                message: error.message || "Internal server error.",
+            });
+        }
+    }
+    async updateProfile(req, res) {
+        try {            
+            const {name}=req.body
+            const id = req.user.id
+            const response = await this.#UserService.updateProfile(name,id)
+            return res.status(response.status).json(response);
+        } catch (error) {
+
+            console.error("Error User:", error.message || error)
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+                success: false,
+                message: error.message || "Internal server error.",
+            });
+        }
+    }
+    async  changePassword (req, res)  {
+        const email =req.user.email
+        
+        const { currentPassword, newPassword, confirmNewPassword } = req.body;
+        try{
+            const response = await this.#UserService.changePassword(currentPassword, newPassword, confirmNewPassword,email )
+            return res.status(response.status).json(response);
+        }
+        catch (error) {
+            console.error("Error User:", error.message || error)
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+                success: false,
+                message: error.message || "Internal server error.",
+            });
+        }
+    }
+
 
 }
 

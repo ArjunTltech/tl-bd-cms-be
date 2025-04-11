@@ -1,12 +1,17 @@
 import express from 'express'
-import enquryRoute from './enquiriesRoute.js'
-// import userRoute from './userRoute.js'
+
+import categoryRoutes from './categoryRoute.js'
+import sliderRoutes from './sliderRoute.js'
+import enqiuiryRoutes from './enquiryRoute.js'
 import socialRoute from './socialRoute.js'
 const router = express.Router()
 
 
-// router.use('/user',userRoute)
-router.use('/enquiry',enquryRoute)
+router.use("/category", categoryRoutes);
+router.use("/slider", sliderRoutes);
+router.use("/enquiry", enqiuiryRoutes);
+
+
 router.use('/social',socialRoute)
 
 
