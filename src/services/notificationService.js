@@ -48,10 +48,22 @@ class NotificationService {
     async markAsRead(notificationId) {
         try {
             let markAsReadNotification = await this.#reposistorys.markReadAsNotification(notificationId)
-            if (markAsReadNotification) {
-                return { status: 400, message: 'Failed Notification to marked as read', success: true }
+            if (! markAsReadNotification) {
+                return { status: 400, message: 'Failed Notification to marked as read', success: false  }
             }
             return { status: 200, message: 'Notification marked as read', success: true }
+
+        } catch (error) {
+            console.error("Error in NotificationService:", error.message || error);
+            throw error        }
+    };
+    async markAllAsRead() {
+        try {
+            let markAsReadNotification = await this.#reposistorys.markAllAsReadNotification()
+            if (! markAsReadNotification) {
+                return { status: 400, message: 'Failed Notification to marked as read', success: false  }
+            }
+            return { status: 200, message: 'All notifications marked as read', success: true }
 
         } catch (error) {
             console.error("Error in NotificationService:", error.message || error);
