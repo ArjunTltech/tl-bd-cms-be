@@ -290,7 +290,33 @@ class StatsController {
         }
     }
 
+    async countryAnalytics(req, res) {
+        try {
+            const response = await this.#StatsService.countryAnalyticsService(req.query);
+            return res.status(response.status).json(response);
+        } catch (error) {   
+            console.error("Error in country Analytics:", error.message || error);
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+                success: false,
+                message: error.message || "Internal server error.",
+            });
+        }
+    }
 
+    async eventNameCounts(req, res) {
+    try {
+        const response = await this.#StatsService.eventNameCountsService(req.query);
+        return res.status(response.status).json(response);
+    } catch (error) {
+        console.error("Error in event name Analytics:", error.message || error);
+        const statusCode = error.status || 500;
+        return res.status(statusCode).json({
+            success: false,
+            message: error.message || "Internal server error.",
+        });
+    }
+    }
 
 }
 export default StatsController

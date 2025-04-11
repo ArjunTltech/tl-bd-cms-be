@@ -188,6 +188,17 @@ class Repositorys {
     });
   }
 
+  async getAllActiveSocials() {
+    return await prisma.social.findMany({
+        where: {
+            isActive: true,
+        },
+        orderBy: {
+            createdAt: 'desc', 
+        },
+    });
+}
+
   async deleteSocial(id) {
     return await prisma.social.delete({
       where: { id }
@@ -699,6 +710,49 @@ async getTotalNewsletterSubscribers() {
         console.error('Error counting newsletter subscribers:', error);
         throw error;
     }
+}
+
+// Add this method to your Repositorys class
+async fetchCountryStats(dateRange) {
+    try {
+        const result = await fetchReport(
+            [{ name: 'totalUsers' }],
+            [{ name: 'country' }],
+            dateRange
+        );
+
+        return result.map(item => ({
+            country: item.country,
+            totalUsers: item.totalUsers
+        }));
+    } catch (error) {
+        console.error('Error fetching country stats:', error);
+        throw error;
+    }
+}
+
+
+/**
+ * Fetch event name counts data from Google Analytics
+ * @param {Object} dateRange - Date range for analytics
+ * @returns {Promise<Array>} Event name counts data
+ */
+async fetchEventNameCounts(dateRange) {
+  try {
+      const result = await fetchReport(
+          [{ name: 'eventCount' }],
+          [{ name: 'eventName' }],
+          dateRange
+      );
+
+      return result.map(item => ({
+          eventName: item.eventName,
+          eventCount: item.eventCount
+      }));
+  } catch (error) {
+      console.error('Error fetching event name counts:', error);
+      throw error;
+  }
 }
 
 

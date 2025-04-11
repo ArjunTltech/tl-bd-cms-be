@@ -258,7 +258,86 @@ class StatsService {
     }
 
 
-    
+// Complete this method in your StatsService class
+async countryAnalyticsService(query = {}) {
+    try {
+        // Check if date parameters are provided from frontend
+        let dateRange;
+        
+        if (query.startDate && query.endDate) {
+            // Use the dates provided from frontend
+            dateRange = { 
+                startDate: query.startDate, 
+                endDate: query.endDate 
+            };
+        } else {
+            // Default fallback - 30 days if no dates are provided
+            dateRange = { 
+                startDate: '365daysAgo', 
+                endDate: 'today' 
+            };
+        }
+            
+        const result = await this.#repositorys.fetchCountryStats(dateRange);
+        
+        if (!result?.length) {
+            return {
+                status: 404,
+                success: false,
+                message: 'No data found for country analytics.'
+            };
+        }
+
+        // Sort by number of users descending
+        const sortedData = result.map(item => ({
+            country: item.country,
+            totalUsers: parseInt(item.totalUsers)
+        })).sort((a, b) => b.totalUsers - a.totalUsers);
+
+        return {
+            status: 200,
+            success: true,
+            data: sortedData
+        };
+    } catch (error) {
+        console.error('Error in countryAnalyticsService:', error);
+        throw {
+            status: 500,
+            message: 'Failed to fetch country analytics data.'
+        };
+    }
+}
+
+
+async eventNameCountsService(query) {
+    try {
+        // Extract date range from query parameters or use defaults
+        const dateRange = {
+            startDate: query.startDate || '30daysAgo',
+            endDate: query.endDate || 'today'
+        };
+        
+        // Call the repository method to fetch event name counts
+        const eventData = await this.#repositorys.fetchEventNameCounts(dateRange);
+        
+        // You can sort by count if needed
+        const sortedEvents = eventData.sort((a, b) => b.eventCount - a.eventCount);
+        
+        return {
+            status: 200,
+            success: true,
+            message: "Event name counts retrieved successfully",
+            data: sortedEvents
+        };
+    } catch (error) {
+        console.error("Error in eventNameCountsService:", error);
+        throw {
+            status: 500,
+            message: "Failed to retrieve event name counts"
+        };
+    }
+}
+
 
 }
 export default StatsService

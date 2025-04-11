@@ -23,4 +23,5 @@ router.get("/traffic-sources", (req, res) => statsController.trafficSources(req,
 router.get("/session-duration", (req, res) => statsController.sessionDuration(req, res));
 router.get("/total-enquiries", (req, res) => statsController.totalEnquiries(req, res));
 router.get("/newsletter-subscribers", (req, res) => statsController.newsletterSubscribers(req, res));
+router.get("/event-name-counts", (req, res) => statsController.eventNameCounts(req, res));
 export default router;
