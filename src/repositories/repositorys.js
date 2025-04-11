@@ -443,29 +443,49 @@ class Repositorys {
     return await prisma.products.findMany();
 
   }
-
+async findProductById(productId){
+  return await prisma.products.findUnique({
+    where:{
+      id:productId
+    }
+  })
+}
+async findServiceById(serviceId){
+  return await prisma.service.findUnique({
+    where:{
+      id:serviceId
+    }
+  })
+}
+async findBusinessById(businessId){
+  return await prisma.business.findUnique({
+    where:{
+      id:businessId
+    }
+  })
+}
   async editService(serviceId,serviceName){
     return await prisma.service.update({
       where:{
         id:serviceId
       },
-      data:{serviceName}
+      data:{service:serviceName}
     })
   }
   async editProduct(productId,productName){
-    return await prisma.product.update({
+    return await prisma.products.update({
       where:{
         id:productId
       },
-      data:{productName}
+      data:{products:productName}
     })
   }
   async editBusiness(businessId,businessName){
-    return await prisma.products.update({
+    return await prisma.business.update({
       where:{
         id:businessId
       },
-      data:{businessName}
+      data:{business:businessName}
     })
   }
 
@@ -491,7 +511,35 @@ class Repositorys {
     })
   }
 
+async  getAllNotifications(){
+    return await prisma.notification.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 15 
+    });
+  }
+  async deleteNotification(id){
+    return await prisma.notification.delete({
+      where: {
+        id : id
+      }
+    });
+  }
+  async updateUserName(userName,userId){
+    return await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        name:userName 
+      },
+    });
+  }
 
+  async clearAllNotifications(){
+    return await prisma.user.deleteMany({})
+  }
 }
 
 export default Repositorys;

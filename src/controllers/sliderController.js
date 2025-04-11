@@ -38,7 +38,7 @@ class SliderController {
         }
     }
   async  getSlider(req,res){
-        try {
+        try {            
             const response = await this.#sliderService.getSlider()
             return res.status(response.status).json(response)
         } catch (error) {

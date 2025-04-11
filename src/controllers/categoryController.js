@@ -96,9 +96,7 @@ class CategoryController {
     async  deleteBusiness(req,res){
         try {            
             const businessId =req.params.businessId            
-            const response = await this.#categoryService.deleteBusiness(businessId)
-           console.log(response);
-           
+            const response = await this.#categoryService.deleteBusiness(businessId)           
             return res.status(response.status).json(response)
         } catch (error) {
             console.error("Error in CategoryController:", error.message || error);
@@ -111,7 +109,7 @@ class CategoryController {
     }
     async  deleteProduct(req,res){
         try {            
-            const productId =req.params.id
+            const productId =req.params.productId
             const response = await this.#categoryService.deleteProduct(productId)
             return res.status(response.status).json(response)
         } catch (error) {
@@ -125,7 +123,7 @@ class CategoryController {
     }
     async  deleteService(req,res){
         try {            
-            const serviceId =req.params.id
+            const serviceId =req.params.serviceId
             const response = await this.#categoryService.deleteService(serviceId)
             return res.status(response.status).json(response)
         } catch (error) {
@@ -137,6 +135,59 @@ class CategoryController {
             });
         }
     }
+    async editProduct(req,res){
+        try {            
+            const {product} =req.body
+           const productId = req.params.productId             
+           const response = await this.#categoryService.editProduct(productId,product) 
+          
+            return res.status(response.status).json(response);
+            
+        } catch (error) {
+            console.error("Error in CategoryController:", error.message || error);
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+              success: false,
+              message: error.message || "Internal server error.",
+            });
+        }
+    }
+    async editService(req, res) {
+        try {            
+            const { service } = req.body;
+            const serviceId = req.params.serviceId;             
+            const response = await this.#categoryService.editService(serviceId, service);
+          
+            return res.status(response.status).json(response);
+            
+        } catch (error) {
+            console.error("Error in BusinessController:", error.message || error);
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+                success: false,
+                message: error.message || "Internal server error.",
+            });
+        }
+    }
+    async editBusiness(req, res) {
+        try {            
+            const { business } = req.body;
+            const businessId = req.params.businessId;             
+            const response = await this.#categoryService.editBusiness(businessId, business);
+          
+            return res.status(response.status).json(response);
+            
+        } catch (error) {
+            console.error("Error in BusinessController:", error.message || error);
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+                success: false,
+                message: error.message || "Internal server error.",
+            });
+        }
+    }
+    
+    
 }
 
 export default CategoryController

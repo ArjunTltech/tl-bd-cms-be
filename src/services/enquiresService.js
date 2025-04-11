@@ -1,18 +1,24 @@
 import { generatePdfReport } from "../utils/pdf.js"
 import {format} from 'date-fns'
 import ExcelJS from 'exceljs'
+import { createNotification } from "../helpers/createNotification.js"
 class EnquiresService{
     #reposistorys
     constructor(reposistorys){
         this.#reposistorys =reposistorys
     }
-    async addEnquiry(name,email,phoneNumber,country,message,business,products,service){
-        try {
+    async addEnquiry({name,email,phoneNumber,country,message,business,products,service}){
+        try {          
             if(!name|| !email|| !phoneNumber ||!country ||!message||!business||!products ||!service){
                 return {status:400,message:"All fields Required"}
             }
             const enquiresDetails ={name,email,phoneNumber,country,message,business,products,service}
             const enquiry = await this.#reposistorys.createEnquiry(enquiresDetails)
+            const notificationMessage = `You have an enquiry from ${name}`;
+            await createNotification({
+              subject: 'New Contact Enquiry',
+              message: notificationMessage
+            });
             if(!enquiry){
             return { success: false, status: 500, message: "Error creating enquiry" };
             }
