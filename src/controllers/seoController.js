@@ -7,6 +7,7 @@ class SEOController {
     async upsertSEO(req, res) {
         try {
         const { pageTitle } = req.params;
+        
         const {
             title,
             description,
@@ -46,6 +47,8 @@ class SEOController {
     async getSeo(req,res){
         try {
             const { pageTitle } = req.params;
+            console.log(pageTitle);
+            
             const response = await this.#seoService.getSeo(pageTitle)
             return res.status(response.status).json(response);
 

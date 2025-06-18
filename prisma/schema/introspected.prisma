@@ -1,0 +1,22 @@
+model dropdown_items {
+  id                String            @id
+  title             String
+  pdfUrl            String?
+  pdfPublicId       String?
+  isComingSoon      Boolean           @default(false)
+  order             Int               @default(0)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime
+  sectionId         String
+  dropdown_sections dropdown_sections @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+}
+
+model dropdown_sections {
+  id             String           @id
+  title          String
+  isEnabled      Boolean          @default(true)
+  order          Int              @default(0)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime
+  dropdown_items dropdown_items[]
+}

@@ -10,7 +10,7 @@ const enquiryController = new EnquiryController(new EnquiresService(new Reposito
 
 router.get("/get-all-enqiuries",verifyJwtToken, (req, res) => enquiryController.enquiresDetails(req, res)); 
 router.post("/add-enqiuires",(req,res)=>enquiryController.addEnquiry(req,res))
-router.post("/delete-enqiuires/:id",verifyJwtToken,(req,res)=>enquiryController.deleteEnquiry(req,res))
+router.delete("/delete-enqiuires/:id",verifyJwtToken,(req,res)=>enquiryController.deleteEnquiry(req,res))
 router.get("/export-enquiry",verifyJwtToken, (req,res)=>enquiryController.exportEnquiries(req,res));
 
 export default router;

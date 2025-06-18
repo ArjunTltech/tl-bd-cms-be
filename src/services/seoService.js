@@ -40,12 +40,14 @@ class SeoService{
     async getSeo(pageTitle){
         try {
             const seoData = await this.#reposistorys.getSeo(pageTitle)
+            console.log(seoData,"s");
+            
             if(seoData){
                 return {status:200,message:"SEO sent ",seoData}
             }
             else{
                 return {status:400,message:"Failed to sent SEO"}
-            }
+            }       
             
         } catch (error) {
             console.error("Error in SEOService:", error.message || error);
