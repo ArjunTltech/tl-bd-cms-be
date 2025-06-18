@@ -385,6 +385,10 @@ class Repositorys {
   async getTotalEnquiries() {
     return this.safeCount('enquiry');
   }
+  async getTotalChatbot() {
+    return this.safeCount('chatbot');
+  }
+
 
   async getUnreadNotifications() {
     return this.safeConditionalCount('notification', { isRead: false });
@@ -870,6 +874,67 @@ async  getAllNotifications(){
         isRead: true
       }
     });
+  }
+    async createChat(chat) {      
+    return await prisma.chatbot.create({
+      data: chat
+    })
+  }
+     async deleteChat(chatId) {
+    return await prisma.chatbot.delete({
+      where:{
+        id:chatId
+      }
+    })
+  }
+
+  async  getAllChats(){
+    return await prisma.chatbot.findMany({
+      orderBy: {
+        order: 'asc',
+      }
+    });
+  }
+
+  async editQuestion(questionId, updatedData) {
+    return await prisma.chatbot.update({
+      where: { id: questionId },
+      data: updatedData,
+    });
+  }
+  
+  async changeChatorder(updatedChats) {
+   const result = await prisma.$transaction(
+      updatedChats.map(chat => 
+        prisma.chatbot.update({
+          where: { id: chat.id },
+          data: { order: chat.order },
+        })
+      )
+    );
+        return result;
+
+  }
+
+  async createBrochure(brochureData){    
+    return await prisma.brochure.create({
+      data:brochureData
+    })
+    
+  }
+
+  async getAllBrochure(){
+    return await prisma.brochure.findMany()
+  }
+  async deleteBrochure(brochureId){
+    await prisma.brochure.delete({
+      where:{id:brochureId}
+    })
+  }
+  async getBrochureById(brochureId){
+   return  await prisma.brochure.findUnique({
+      where:{id:brochureId}
+    })
   }
 }
 

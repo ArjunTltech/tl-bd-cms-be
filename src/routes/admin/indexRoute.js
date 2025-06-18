@@ -11,6 +11,8 @@ import seoRoutes from './seoRoute.js'
 import categoryRoutes from './categoryRoute.js'
 import notificationRoutes from './notificationRoute.js'
 import TooltipRoutes from './tooltipRoute.js'
+import chatbotRoutes from './chatbotRoute.js'
+import brochureRoutes from './brochureRoute.js'
 const router = express.Router()
 
 
@@ -26,7 +28,8 @@ router.use("/seo", seoRoutes);
 router.use("/category", categoryRoutes);
 router.use("/notification", notificationRoutes);
 router.use("/tooltips", TooltipRoutes);
-
+router.use('/chatbot',chatbotRoutes)
+router.use('/brochure',brochureRoutes)
 
 
 

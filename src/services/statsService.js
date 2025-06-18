@@ -15,6 +15,7 @@ class StatsService {
             totalEnquiries,
             unreadNotifications,
             activeSocialLinks,
+            totalChatbot
         ] = await Promise.all([
             this.#repositorys.getTotalClients(),
             this.#repositorys.getActiveClients(),
@@ -24,6 +25,7 @@ class StatsService {
             this.#repositorys.getTotalEnquiries(),
             this.#repositorys.getUnreadNotifications(),
             this.#repositorys.getActiveSocialLinks(),
+            this.#repositorys.getTotalChatbot(),
         ]);
 
         return {
@@ -47,6 +49,9 @@ class StatsService {
             social: {
                 active: activeSocialLinks
             },
+            chatBot:{
+                total:totalChatbot
+            }
         };
     }
 

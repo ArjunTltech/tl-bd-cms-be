@@ -5,6 +5,8 @@ import sliderRoutes from './sliderRoute.js'
 import enqiuiryRoutes from './enquiryRoute.js'
 import socialRoute from './socialRoute.js'
 import TooltipRoutes from './tooltipRoute.js'
+import chatbotRoutes from './chatbotRoute.js'
+import seoRoutes from './seoRoute.js'
 const router = express.Router()
 
 
@@ -13,6 +15,8 @@ router.use("/slider", sliderRoutes);
 router.use("/enquiry", enqiuiryRoutes);
 router.use('/social',socialRoute)
 router.use("/tooltips", TooltipRoutes);
+router.use("/chatbot", chatbotRoutes);
+router.use("/seo", seoRoutes);
 
 
 
