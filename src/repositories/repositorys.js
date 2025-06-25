@@ -926,11 +926,18 @@ async  getAllNotifications(){
   async getAllBrochure(){
     return await prisma.brochure.findMany()
   }
-  async deleteBrochure(brochureId){
-    await prisma.brochure.delete({
-      where:{id:brochureId}
-    })
-  }
+  async deleteBrochure(brochureId) {
+  return await prisma.brochure.delete({
+    where: { id: brochureId }
+  });
+}
+async updateBrochure(id, updateData) {
+  return await prisma.brochure.update({
+    where: { id },
+    data: updateData
+  });
+}
+
   async getBrochureById(brochureId){
    return  await prisma.brochure.findUnique({
       where:{id:brochureId}
