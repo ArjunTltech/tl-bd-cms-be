@@ -1,4 +1,4 @@
-import { imageUploadToCloudinary } from "../utils/cloudinary.js";
+import { deletePDFFromCloudinary, uploadPDFToCloudinary } from "../utils/cloudinary.js";
 
 class BrochureService {
     #reposistorys
@@ -9,7 +9,7 @@ class BrochureService {
         try {
             if (file) {
                 const folderPath = 'bd/brochure';
-                const result = await imageUploadToCloudinary(file, folderPath);
+                const result = await uploadPDFToCloudinary(file, folderPath);
                 var data = { title, pdfFileUrl: result.secure_url, comingSoon: false }
             }
             else {
@@ -43,37 +43,44 @@ class BrochureService {
             throw error
         }
     }
-    async editBrochure(brochureId, title, file) {
-        try {
-            const brochure = await this.#reposistorys.getBrochureById(brochureId);
+  async editBrochure(brochureId, title, file) {
+    try {
+        const brochure = await this.#reposistorys.getBrochureById(brochureId);
 
-            if (file) {
-                if (!brochure) {
-                    return { status: 404, message: "Brochure not found" };
-                }
-                if (brochure.pdfFileUrl) {
-
-                    await cloudinary.uploader.destroy(brochure.pdfFileUrl)
-                }
-                const folderPath = 'bd/brochure';
-                const result = await imageUploadToCloudinary(file, folderPath);
-                var data = { title, pdfFileUrl: result.secure_url, comingSoon: false }
-
-            }
-
-            const editBrochure = await this.#reposistorys.editBrochure(brochureId, data)
-            if (editBrochure) {
-                return { status: 200, message: "Brochure updated successfully", brochures }
-
-            } else {
-                return { status: 400, message: "Brochure failed successfully", brochures }
-
-            }
-        } catch (error) {
-            console.error("Error in BrochureService:", error.message || error);
-            throw error
+        if (!brochure) {
+            return { status: 404, message: "Brochure not found" };
         }
+
+        let data = { title };
+
+        if (file) {
+            // Delete old PDF if it exists
+            if (brochure.pdfFileUrl) {
+                await deletePDFFromCloudinary(brochure.pdfFileUrl);
+            }
+
+            // Upload new file
+            const folderPath = 'bd/brochure';
+            const result = await uploadPDFToCloudinary(file, folderPath);
+
+            // Update data with new file URL
+            data.pdfFileUrl = result.secure_url;
+            data.comingSoon = false;
+        }
+
+        const updatedBrochure = await this.#reposistorys.editBrochure(brochureId, data);
+
+        if (updatedBrochure) {
+            return { status: 200, message: "Brochure updated successfully" };
+        } else {
+            return { status: 400, message: "Brochure update failed" };
+        }
+    } catch (error) {
+        console.error("Error in BrochureService:", error.message || error);
+        throw error;
     }
+}
+
     async deleteBrochure(brochureId) {
         try {
             const brochure = await this.#reposistorys.getBrochureById(brochureId);
@@ -83,7 +90,7 @@ class BrochureService {
             }
             if (brochure.pdfFileUrl) {
 
-                await cloudinary.uploader.destroy(brochure.pdfFileUrl)
+                await deletePDFFromCloudinary(brochure.pdfFileUrl)
             }
 
             const brochures = await this.#reposistorys.deleteBrochure(brochureId)
