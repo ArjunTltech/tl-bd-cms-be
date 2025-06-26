@@ -7,11 +7,13 @@ class BrochureService {
     }
     async createBrochure(title, file) {
         try {
-            if(file){const folderPath = 'bd/brochure';
-            const result = await imageUploadToCloudinary(file, folderPath);
-            var data = { title, pdfFileUrl: result.secure_url,comingSoon:false }}
-            else{
-                data={title}
+            if (file) {
+                const folderPath = 'bd/brochure';
+                const result = await imageUploadToCloudinary(file, folderPath);
+                var data = { title, pdfFileUrl: result.secure_url, comingSoon: false }
+            }
+            else {
+                data = { title }
             }
             const createBrochure = await this.#reposistorys.createBrochure(data)
             if (createBrochure) {
@@ -36,6 +38,37 @@ class BrochureService {
 
             }
 
+        } catch (error) {
+            console.error("Error in BrochureService:", error.message || error);
+            throw error
+        }
+    }
+    async editBrochure(brochureId, title, file) {
+        try {
+            const brochure = await this.#reposistorys.getBrochureById(brochureId);
+
+            if (file) {
+                if (!brochure) {
+                    return { status: 404, message: "Brochure not found" };
+                }
+                if (brochure.pdfFileUrl) {
+
+                    await cloudinary.uploader.destroy(brochure.pdfFileUrl)
+                }
+                const folderPath = 'bd/brochure';
+                const result = await imageUploadToCloudinary(file, folderPath);
+                var data = { title, pdfFileUrl: result.secure_url, comingSoon: false }
+
+            }
+
+            const editBrochure = await this.#reposistorys.editBrochure(brochureId, data)
+            if (editBrochure) {
+                return { status: 200, message: "Brochure updated successfully", brochures }
+
+            } else {
+                return { status: 400, message: "Brochure failed successfully", brochures }
+
+            }
         } catch (error) {
             console.error("Error in BrochureService:", error.message || error);
             throw error
