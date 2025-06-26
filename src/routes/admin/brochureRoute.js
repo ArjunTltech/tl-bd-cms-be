@@ -6,10 +6,11 @@ import upload from "../../utils/multer.js";
 
 
 const router = express.Router();
-const sliderController = new BrochureController(new BrochureService(new Repositorys())); 
+const brochureController = new BrochureController(new BrochureService(new Repositorys())); 
 
-router.post("/add-brochure",upload.single("file"),(req, res) => sliderController.addBrochure(req, res)); 
-router.get("/get-all-brochure",(req, res) => sliderController.getAllBrochure(req, res)); 
-router.delete("/delete-brochure/:id", (req,res)=>sliderController.deleteBrochure(req,res))
+router.post("/add-brochure",upload.single("image"),(req, res) => brochureController.addBrochure(req, res)); 
+router.get("/get-all-brochure",(req, res) => brochureController.getAllBrochure(req, res)); 
+router.delete("/delete-brochure/:id", (req,res)=>brochureController.deleteBrochure(req,res))
+router.put("/edit-brochure/:id", (req, res) => brochureController.editBrochure(req, res));
 
 export default router;
