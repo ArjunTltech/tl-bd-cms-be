@@ -50,7 +50,7 @@ class BrochureController {
     }
     async editBrochure(req, res) {
         try {
-            const brochureId = req.params.id
+            const brochureId = req.params.id            
             const { title } = req.body
             const response = await this.#brochureService.editBrochure(brochureId, title, req.file)
             return res.status(response.status).json(response)
