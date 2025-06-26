@@ -51,21 +51,35 @@ const uploadPDFToCloudinary = async (file, folderPath) => {
       throw new Error("Invalid file. Only PDF files are allowed.");
     }
 
-    const b64 = Buffer.from(file.buffer).toString("base64");
-    const dataURI = `data:${file.mimetype};base64,${b64}`;
-
-    const result = await cloudinary.v2.uploader.upload(dataURI, {
+    // Clean filename - remove special characters
+    const cleanName = file.originalname.replace(/[^\w.-]/g, '_');
+    
+    const uploadOptions = {
       folder: folderPath,
-      resource_type: "raw", // explicitly for non-image files like PDFs
-    });
+      resource_type: "auto", // Let Cloudinary detect the type
+      type: "upload",
+      public_id: `${Date.now()}_${cleanName.replace('.pdf', '')}`,
+      overwrite: true,
+      invalidate: true,
+      flags: "attachment", // Ensures download rather than display
+      format: 'pdf', // Force PDF format
+      timeout: 60000
+    };
 
-    return result; // contains secure_url, public_id, etc.
+    const result = await cloudinary.v2.uploader.upload(
+      `data:application/pdf;base64,${file.buffer.toString('base64')}`,
+      uploadOptions
+    );
+
+    return {
+      ...result,
+      secure_url: result.secure_url
+    };
   } catch (error) {
-    console.error("PDF Upload Error:", error);
-    throw new Error("Failed to upload PDF to Cloudinary");
+    console.error("Upload Error:", error);
+    throw new Error(`PDF upload failed: ${error.message}`);
   }
 };
-
 /**
  * Delete a PDF from Cloudinary using its publicId
  * @param {string} publicId - The Cloudinary public ID (e.g., "bd/brochure/filename")
