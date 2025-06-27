@@ -1,8 +1,9 @@
 model Brochure {
   id          String   @id @default(uuid())
   title       String
-  pdfFileUrl  String?  // Made optional with ?
-  comingSoon  Boolean  @default(true)  // Fixed syntax
+  pdfFileUrl  String?
+  pdfPublicId String?  
+  comingSoon  Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
