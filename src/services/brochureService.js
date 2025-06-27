@@ -11,9 +11,11 @@ class BrochureService {
             if (file) {
                 const folderPath = 'bd/brochure';
                 const result = await uploadPDFToCloudinary(file, folderPath);
+                console.log(result, "S")
                 data = {
                     title,
                     pdfFileUrl: result.secure_url,
+                    pdfPublicId: result.public_id,
                     comingSoon: false
                 };
             } else {
@@ -70,7 +72,9 @@ class BrochureService {
 
                 // Update data with new file URL
                 data.pdfFileUrl = result.secure_url;
-                data.comingSoon = false;
+                data.pdfPublicId = result.public_id,
+
+                    data.comingSoon = false;
             }
 
             const updatedBrochure = await this.#reposistorys.editBrochure(brochureId, data);
@@ -86,32 +90,27 @@ class BrochureService {
         }
     }
 
-    async deleteBrochure(brochureId) {
-        try {
-            const brochure = await this.#reposistorys.getBrochureById(brochureId);
-
-            if (!brochure) {
-                return { status: 404, message: "Brochure not found" };
-            }
-            if (brochure.pdfFileUrl) {
-
-                await deletePDFFromCloudinary(brochure.pdfFileUrl)
-            }
-
-            const brochures = await this.#reposistorys.deleteBrochure(brochureId)
-            if (brochures) {
-                return { status: 200, message: "Brochures deleted successfully" }
-
-            } else {
-                return { status: 400, message: "Failed to delete brochure" }
-
-            }
-
-        } catch (error) {
-            console.error("Error in BrochureService:", error.message || error);
-            throw error
-        }
+   async deleteBrochure(brochureId) {
+  try {
+    const brochure = await this.#reposistorys.getBrochureById(brochureId);
+    if (!brochure) {
+      return { status: 404, message: "Brochure not found" };
     }
+
+    if (brochure.pdfPublicId) {
+      await deletePDFFromCloudinary(brochure.pdfPublicId);
+    }
+
+    const deleteResult = await this.#reposistorys.deleteBrochure(brochureId);
+    if (deleteResult) {
+      return { status: 200, message: "Brochure deleted successfully" };
+    }
+    return { status: 400, message: "Failed to delete brochure" };
+  } catch (error) {
+    console.error("Error in BrochureService:", error);
+    throw error;
+  }
+}
 
 
 
