@@ -5,8 +5,8 @@ import Repositorys from "../../repositories/repositorys.js";
 
 
 const router = express.Router();
-const sliderController = new BrochureController(new BrochureService(new Repositorys())); 
+const brochureController = new BrochureController(new BrochureService(new Repositorys())); 
 
-router.get("/get-all-brochure",(req, res) => sliderController.getAllBrochure(req, res)); 
+router.get("/get-all-brochure",(req, res) => brochureController.getAllBrochure(req, res)); 
 
 export default router;
