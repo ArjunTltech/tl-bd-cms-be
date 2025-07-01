@@ -12,5 +12,6 @@ router.get("/get-all-enqiuries",verifyJwtToken, (req, res) => enquiryController.
 router.post("/add-enqiuires",(req,res)=>enquiryController.addEnquiry(req,res))
 router.delete("/delete-enqiuires/:id",verifyJwtToken,(req,res)=>enquiryController.deleteEnquiry(req,res))
 router.get("/export-enquiry",verifyJwtToken, (req,res)=>enquiryController.exportEnquiries(req,res));
+router.patch("/update-status/:id", verifyJwtToken, (req,res)=>enquiryController.updateEnquiry(req,res));
 
 export default router;

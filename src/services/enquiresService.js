@@ -124,6 +124,21 @@ class EnquiresService{
         throw error;
       }
     }
+
+      async updateEnquiry(enquiryId){
+        try {
+          const enquries = await this.#reposistorys.updateEnquiry(enquiryId)  
+          
+          if(enquries){
+            return {status:200,message:"Enquiries marked as read "}
+          }else{
+            return {status:500,message:"Failed to mark as read"}
+          }
+        } catch (error) {
+            console.error("Error in EnquryService:", error.message || error);
+      throw error
+        }
+    }
     
 }
 export default EnquiresService
