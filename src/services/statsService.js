@@ -15,7 +15,8 @@ class StatsService {
             totalEnquiries,
             unreadNotifications,
             activeSocialLinks,
-            totalChatbot
+            totalChatbot,
+            totalBrochure
         ] = await Promise.all([
             this.#repositorys.getTotalClients(),
             this.#repositorys.getActiveClients(),
@@ -26,6 +27,7 @@ class StatsService {
             this.#repositorys.getUnreadNotifications(),
             this.#repositorys.getActiveSocialLinks(),
             this.#repositorys.getTotalChatbot(),
+            this.#repositorys.getTotalBrochures(),
         ]);
 
         return {
@@ -49,8 +51,11 @@ class StatsService {
             social: {
                 active: activeSocialLinks
             },
-            chatBot:{
-                total:totalChatbot
+            chatBot: {
+                total: totalChatbot
+            },
+            brochures: {
+                total: totalBrochure
             }
         };
     }
@@ -73,7 +78,7 @@ class StatsService {
     async activeUsersAnalytics(dateRange = { startDate: '30daysAgo', endDate: 'today' }) {
         try {
             const result = await this.#repositorys.fetchActiveUsers(dateRange);
-            
+
             if (!result?.length) {
                 return [];
             }
@@ -91,7 +96,7 @@ class StatsService {
     async engagedSessionsAnalytics(dateRange = { startDate: '30daysAgo', endDate: 'today' }) {
         try {
             const result = await this.#repositorys.fetchEngagedSessions(dateRange);
-            
+
             if (!result?.length) {
                 return [];
             }
@@ -109,7 +114,7 @@ class StatsService {
     async cityStatsAnalytics(dateRange = { startDate: '30daysAgo', endDate: 'today' }) {
         try {
             const result = await this.#repositorys.fetchCityStats(dateRange);
-            
+
             if (!result?.length) {
                 return [];
             }
@@ -127,7 +132,7 @@ class StatsService {
     async pageViewsAnalytics(dateRange = { startDate: '30daysAgo', endDate: 'today' }) {
         try {
             const result = await this.#repositorys.fetchPageViews(dateRange);
-            
+
             if (!result?.length) {
                 return [];
             }
@@ -145,7 +150,7 @@ class StatsService {
     async bounceRateAnalytics(dateRange = { startDate: '30daysAgo', endDate: 'today' }) {
         try {
             const result = await this.#repositorys.fetchBounceRate(dateRange);
-            
+
             if (!result?.length) {
                 return [];
             }
@@ -163,7 +168,7 @@ class StatsService {
     async pageViewsByPageAnalytics(dateRange = { startDate: '30daysAgo', endDate: 'today' }) {
         try {
             const result = await this.#repositorys.fetchPageViewsByPage(dateRange);
-            
+
             if (!result?.length) {
                 return [];
             }
@@ -181,7 +186,7 @@ class StatsService {
     async trafficSourcesAnalytics(dateRange = { startDate: '30daysAgo', endDate: 'today' }) {
         try {
             const result = await this.#repositorys.fetchTrafficSources(dateRange);
-            
+
             if (!result?.length) {
                 return [];
             }
@@ -191,10 +196,10 @@ class StatsService {
                 channel: item.sessionDefaultChannelGroup,
                 sessions: parseInt(item.sessions),
                 users: parseInt(item.totalUsers)
-            })).filter(item => 
+            })).filter(item =>
                 [
                     'Organic Search',
-                    'Paid Search', 
+                    'Paid Search',
                     'Direct',
                     'Referral',
                     'Social',
@@ -227,7 +232,7 @@ class StatsService {
     async sessionDurationAnalytics(dateRange = { startDate: '30daysAgo', endDate: 'today' }) {
         try {
             const result = await this.#repositorys.fetchSessionDuration(dateRange);
-            
+
             if (!result?.length) {
                 return [];
             }
@@ -252,96 +257,108 @@ class StatsService {
         }
     }
 
-    async newsletterSubscribersAnalytics() {
+
+    async brochureCount() {
         try {
-            const totalSubscribers = await this.#repositorys.getTotalNewsletterSubscribers();
-            return totalSubscribers;
+            const totalBrochureCount = await this.#repositorys.getTotalBrochure();
+            return totalBrochureCount;
         } catch (error) {
-            console.error('Error in newsletterSubscribersAnalytics:', error);
-            throw new Error('Failed to fetch newsletter subscribers');
+            console.error('Error in BrochureAnalytics:', error);
+            throw new Error('Failed to fetch Brochure count');
         }
     }
 
 
-// Complete this method in your StatsService class
-async countryAnalyticsService(query = {}) {
-    try {
-        // Check if date parameters are provided from frontend
-        let dateRange;
-        
-        if (query.startDate && query.endDate) {
-            // Use the dates provided from frontend
-            dateRange = { 
-                startDate: query.startDate, 
-                endDate: query.endDate 
-            };
-        } else {
-            // Default fallback - 30 days if no dates are provided
-            dateRange = { 
-                startDate: '365daysAgo', 
-                endDate: 'today' 
-            };
+    async slidersCount() {
+        try {
+            const totalSliderCount = await this.#repositorys.getTotalSliders();
+            return totalSliderCount;
+        } catch (error) {
+            console.error('Error in SliderAnalytics:', error);
+            throw new Error('Failed to fetch Slider count');
         }
-            
-        const result = await this.#repositorys.fetchCountryStats(dateRange);
-        
-        if (!result?.length) {
+    }
+
+
+    // Complete this method in your StatsService class
+    async countryAnalyticsService(query = {}) {
+        try {
+            // Check if date parameters are provided from frontend
+            let dateRange;
+
+            if (query.startDate && query.endDate) {
+                // Use the dates provided from frontend
+                dateRange = {
+                    startDate: query.startDate,
+                    endDate: query.endDate
+                };
+            } else {
+                // Default fallback - 30 days if no dates are provided
+                dateRange = {
+                    startDate: '365daysAgo',
+                    endDate: 'today'
+                };
+            }
+
+            const result = await this.#repositorys.fetchCountryStats(dateRange);
+
+            if (!result?.length) {
+                return {
+                    status: 404,
+                    success: false,
+                    message: 'No data found for country analytics.'
+                };
+            }
+
+            // Sort by number of users descending
+            const sortedData = result.map(item => ({
+                country: item.country,
+                totalUsers: parseInt(item.totalUsers)
+            })).sort((a, b) => b.totalUsers - a.totalUsers);
+
             return {
-                status: 404,
-                success: false,
-                message: 'No data found for country analytics.'
+                status: 200,
+                success: true,
+                data: sortedData
+            };
+        } catch (error) {
+            console.error('Error in countryAnalyticsService:', error);
+            throw {
+                status: 500,
+                message: 'Failed to fetch country analytics data.'
             };
         }
-
-        // Sort by number of users descending
-        const sortedData = result.map(item => ({
-            country: item.country,
-            totalUsers: parseInt(item.totalUsers)
-        })).sort((a, b) => b.totalUsers - a.totalUsers);
-
-        return {
-            status: 200,
-            success: true,
-            data: sortedData
-        };
-    } catch (error) {
-        console.error('Error in countryAnalyticsService:', error);
-        throw {
-            status: 500,
-            message: 'Failed to fetch country analytics data.'
-        };
     }
-}
 
 
-async eventNameCountsService(query) {
-    try {
-        // Extract date range from query parameters or use defaults
-        const dateRange = {
-            startDate: query.startDate || '30daysAgo',
-            endDate: query.endDate || 'today'
-        };
-        
-        // Call the repository method to fetch event name counts
-        const eventData = await this.#repositorys.fetchEventNameCounts(dateRange);
-        
-        // You can sort by count if needed
-        const sortedEvents = eventData.sort((a, b) => b.eventCount - a.eventCount);
-        
-        return {
-            status: 200,
-            success: true,
-            message: "Event name counts retrieved successfully",
-            data: sortedEvents
-        };
-    } catch (error) {
-        console.error("Error in eventNameCountsService:", error);
-        throw {
-            status: 500,
-            message: "Failed to retrieve event name counts"
-        };
+    async eventNameCountsService(query) {
+        try {
+            // Extract date range from query parameters or use defaults
+            const dateRange = {
+                startDate: query.startDate || '30daysAgo',
+                endDate: query.endDate || 'today'
+            };
+
+            // Call the repository method to fetch event name counts
+            const eventData = await this.#repositorys.fetchEventNameCounts(dateRange);
+
+            // You can sort by count if needed
+            const sortedEvents = eventData.sort((a, b) => b.eventCount - a.eventCount);
+
+            return {
+                status: 200,
+                success: true,
+                message: "Event name counts retrieved successfully",
+                data: sortedEvents
+            };
+        } catch (error) {
+            console.error("Error in eventNameCountsService:", error);
+            throw {
+                status: 500,
+                message: "Failed to retrieve event name counts"
+            };
+        }
     }
-}
 
 
 }
