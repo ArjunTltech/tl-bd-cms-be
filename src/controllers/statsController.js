@@ -28,8 +28,8 @@ class StatsController {
             res.json(chartData);
         } catch (error) {
             console.error("Error fetching data:", error);
-            res.status(500).json({ 
-                error: "Failed to fetch data" 
+            res.status(500).json({
+                error: "Failed to fetch data"
             });
         }
     }
@@ -47,18 +47,18 @@ class StatsController {
             const result = await this.#StatsService.activeUsersAnalytics(dateRange);
 
             if (!result.length) {
-                return res.status(404).json({ 
-                    success: false, 
-                    message: 'No active users data found.' 
+                return res.status(404).json({
+                    success: false,
+                    message: 'No active users data found.'
                 });
             }
 
             res.json({ success: true, data: result });
         } catch (error) {
             console.error('Error fetching active users:', error);
-            res.status(500).json({ 
-                success: false, 
-                message: 'Failed to fetch active users.' 
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch active users.'
             });
         }
     }
@@ -74,18 +74,18 @@ class StatsController {
             const result = await this.#StatsService.engagedSessionsAnalytics(dateRange);
 
             if (!result.length) {
-                return res.status(404).json({ 
-                    success: false, 
-                    message: 'No engaged sessions data found.' 
+                return res.status(404).json({
+                    success: false,
+                    message: 'No engaged sessions data found.'
                 });
             }
 
             res.json({ success: true, data: result });
         } catch (error) {
             console.error('Error fetching engaged sessions:', error);
-            res.status(500).json({ 
-                success: false, 
-                message: 'Failed to fetch engaged sessions.' 
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch engaged sessions.'
             });
         }
     }
@@ -101,18 +101,18 @@ class StatsController {
             const result = await this.#StatsService.cityStatsAnalytics(dateRange);
 
             if (!result.length) {
-                return res.status(404).json({ 
-                    success: false, 
-                    message: 'No city statistics found.' 
+                return res.status(404).json({
+                    success: false,
+                    message: 'No city statistics found.'
                 });
             }
 
             res.json({ success: true, data: result });
         } catch (error) {
             console.error('Error fetching city stats:', error);
-            res.status(500).json({ 
-                success: false, 
-                message: 'Failed to fetch city-wise stats.' 
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch city-wise stats.'
             });
         }
     }
@@ -128,18 +128,18 @@ class StatsController {
             const result = await this.#StatsService.pageViewsAnalytics(dateRange);
 
             if (!result.length) {
-                return res.status(404).json({ 
-                    success: false, 
-                    message: 'No page view data found.' 
+                return res.status(404).json({
+                    success: false,
+                    message: 'No page view data found.'
                 });
             }
 
             res.json({ success: true, data: result });
         } catch (error) {
             console.error('Error fetching page views:', error);
-            res.status(500).json({ 
-                success: false, 
-                message: 'Failed to fetch total page views.' 
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch total page views.'
             });
         }
     }
@@ -155,18 +155,18 @@ class StatsController {
             const result = await this.#StatsService.bounceRateAnalytics(dateRange);
 
             if (!result.length) {
-                return res.status(404).json({ 
-                    success: false, 
-                    message: 'No bounce rate data found.' 
+                return res.status(404).json({
+                    success: false,
+                    message: 'No bounce rate data found.'
                 });
             }
 
             res.json({ success: true, data: result });
         } catch (error) {
             console.error('Error fetching bounce rate:', error);
-            res.status(500).json({ 
-                success: false, 
-                message: 'Failed to fetch bounce rate.' 
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch bounce rate.'
             });
         }
     }
@@ -182,18 +182,18 @@ class StatsController {
             const result = await this.#StatsService.pageViewsByPageAnalytics(dateRange);
 
             if (!result.length) {
-                return res.status(404).json({ 
-                    success: false, 
-                    message: 'No page-wise view data found.' 
+                return res.status(404).json({
+                    success: false,
+                    message: 'No page-wise view data found.'
                 });
             }
 
             res.json({ success: true, data: result });
         } catch (error) {
             console.error('Error fetching page views by page:', error);
-            res.status(500).json({ 
-                success: false, 
-                message: 'Failed to fetch page views by page.' 
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch page views by page.'
             });
         }
     }
@@ -209,22 +209,22 @@ class StatsController {
             const result = await this.#StatsService.trafficSourcesAnalytics(dateRange);
 
             if (!result.sources.length) {
-                return res.status(404).json({ 
-                    success: false, 
-                    message: 'No traffic sources data found.' 
+                return res.status(404).json({
+                    success: false,
+                    message: 'No traffic sources data found.'
                 });
             }
 
-            res.json({ 
-                success: true, 
+            res.json({
+                success: true,
                 data: result.sources,
                 summary: result.summary
             });
         } catch (error) {
             console.error('Error fetching traffic sources data:', error);
-            res.status(500).json({ 
-                success: false, 
-                message: 'Failed to fetch traffic sources data.' 
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch traffic sources data.'
             });
         }
     }
@@ -240,18 +240,18 @@ class StatsController {
             const result = await this.#StatsService.sessionDurationAnalytics(dateRange);
 
             if (!result.length) {
-                return res.status(404).json({ 
-                    success: false, 
-                    message: 'No session duration data found.' 
+                return res.status(404).json({
+                    success: false,
+                    message: 'No session duration data found.'
                 });
             }
 
             res.json({ success: true, data: result });
         } catch (error) {
             console.error('Error fetching session duration data:', error);
-            res.status(500).json({ 
-                success: false, 
-                message: 'Failed to fetch session duration data.' 
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch session duration data.'
             });
         }
     }
@@ -273,16 +273,35 @@ class StatsController {
         }
     }
 
-    async newsletterSubscribers(req, res) {
+
+    async TotalBrochureCounts(req, res) {
         try {
-            const totalSubscribers = await this.#StatsService.newsletterSubscribersAnalytics();
+            const totalBrochures = await this.#StatsService.brochureCount();
 
             res.status(200).json({
                 success: true,
-                data: totalSubscribers,
+                data: totalBrochures,
             });
         } catch (error) {
-            console.error("Error fetching total newsletter subscribers:", error.message);
+            console.error("Error fetching total Brochures:", error.message);
+            res.status(500).json({
+                success: false,
+                message: "Internal Server Error",
+            });
+        }
+    }
+
+
+    async TotalSliderCounts(req, res) {
+        try {
+            const totalSliders = await this.#StatsService.slidersCount();
+
+            res.status(200).json({
+                success: true,
+                data: totalSliders,
+            });
+        } catch (error) {
+            console.error("Error fetching total Sliders:", error.message);
             res.status(500).json({
                 success: false,
                 message: "Internal Server Error",
@@ -294,7 +313,7 @@ class StatsController {
         try {
             const response = await this.#StatsService.countryAnalyticsService(req.query);
             return res.status(response.status).json(response);
-        } catch (error) {   
+        } catch (error) {
             console.error("Error in country Analytics:", error.message || error);
             const statusCode = error.status || 500;
             return res.status(statusCode).json({
@@ -305,17 +324,17 @@ class StatsController {
     }
 
     async eventNameCounts(req, res) {
-    try {
-        const response = await this.#StatsService.eventNameCountsService(req.query);
-        return res.status(response.status).json(response);
-    } catch (error) {
-        console.error("Error in event name Analytics:", error.message || error);
-        const statusCode = error.status || 500;
-        return res.status(statusCode).json({
-            success: false,
-            message: error.message || "Internal server error.",
-        });
-    }
+        try {
+            const response = await this.#StatsService.eventNameCountsService(req.query);
+            return res.status(response.status).json(response);
+        } catch (error) {
+            console.error("Error in event name Analytics:", error.message || error);
+            const statusCode = error.status || 500;
+            return res.status(statusCode).json({
+                success: false,
+                message: error.message || "Internal server error.",
+            });
+        }
     }
 
 }

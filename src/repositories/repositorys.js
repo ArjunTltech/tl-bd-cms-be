@@ -196,14 +196,14 @@ class Repositorys {
 
   async getAllActiveSocials() {
     return await prisma.social.findMany({
-        where: {
-            isActive: true,
-        },
-        orderBy: {
-            createdAt: 'desc', 
-        },
+      where: {
+        isActive: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
-}
+  }
 
   async deleteSocial(id) {
     return await prisma.social.delete({
@@ -394,6 +394,9 @@ class Repositorys {
   async getTotalChatbot() {
     return this.safeCount('chatbot');
   }
+  async getTotalBrochures() {
+    return this.safeCount('brochure');
+  }
 
 
   async getUnreadNotifications() {
@@ -465,70 +468,70 @@ class Repositorys {
     return await prisma.products.findMany();
 
   }
-async findProductById(productId){
-  return await prisma.products.findUnique({
-    where:{
-      id:productId
-    }
-  })
-}
-async findServiceById(serviceId){
-  return await prisma.service.findUnique({
-    where:{
-      id:serviceId
-    }
-  })
-}
-async findBusinessById(businessId){
-  return await prisma.business.findUnique({
-    where:{
-      id:businessId
-    }
-  })
-}
-  async editService(serviceId,serviceName){
+  async findProductById(productId) {
+    return await prisma.products.findUnique({
+      where: {
+        id: productId
+      }
+    })
+  }
+  async findServiceById(serviceId) {
+    return await prisma.service.findUnique({
+      where: {
+        id: serviceId
+      }
+    })
+  }
+  async findBusinessById(businessId) {
+    return await prisma.business.findUnique({
+      where: {
+        id: businessId
+      }
+    })
+  }
+  async editService(serviceId, serviceName) {
     return await prisma.service.update({
-      where:{
-        id:serviceId
+      where: {
+        id: serviceId
       },
-      data:{service:serviceName}
+      data: { service: serviceName }
     })
   }
-  async editProduct(productId,productName){
+  async editProduct(productId, productName) {
     return await prisma.products.update({
-      where:{
-        id:productId
+      where: {
+        id: productId
       },
-      data:{products:productName}
+      data: { products: productName }
     })
   }
-  async editBusiness(businessId,businessName){
+  async editBusiness(businessId, businessName) {
     return await prisma.business.update({
-      where:{
-        id:businessId
+      where: {
+        id: businessId
       },
-      data:{business:businessName}
+      data: { business: businessName }
     })
   }
 
-  async deleteService(serviceId){
+  async deleteService(serviceId) {
     return await prisma.service.delete({
-      where:{
-        id:serviceId
+      where: {
+        id: serviceId
       }
     })
   }
-  async deleteProduct(productId){
+  async deleteProduct(productId) {
     return await prisma.products.delete({
-      where:{
-        id:productId
+      where: {
+        id: productId
       }
     })
   }
-  async deleteBusiness(businessId){
+  async deleteBusiness(businessId) {
     return await prisma.business.delete({
-      where:{
-        id:businessId
+      where: {
+        id: businessId
       }
     })
   }
@@ -540,250 +543,250 @@ async findBusinessById(businessId){
      */
   async fetchActiveUsers(dateRange) {
     try {
-        const result = await fetchReport(
-            [{ name: 'activeUsers' }],
-            [],
-            dateRange
-        );
-
-        return result.map(item => ({
-            activeUsers: item.activeUsers,
-            date: item.date
-        }));
-    } catch (error) {
-        console.error('Error fetching active users:', error);
-        throw error;
-    }
-}
-
-/**
- * Fetch engaged sessions data
- * @param {Object} dateRange - Date range for analytics
- * @returns {Promise<Array>} Engaged sessions data
- */
-async fetchEngagedSessions(dateRange) {
-    try {
-        const result = await fetchReport(
-            [{ name: 'engagedSessions' }],
-            [],
-            dateRange
-        );
-
-        return result.map(item => ({
-            engagedSessions: item.engagedSessions,
-            date: item.date
-        }));
-    } catch (error) {
-        console.error('Error fetching engaged sessions:', error);
-        throw error;
-    }
-}
-
-/**
- * Fetch city-wise stats
- * @param {Object} dateRange - Date range for analytics
- * @returns {Promise<Array>} City statistics
- */
-async fetchCityStats(dateRange) {
-    try {
-        const result = await fetchReport(
-            [{ name: 'activeUsers' }],
-            [{ name: 'city' }],
-            dateRange
-        );
-
-        return result.map(item => ({
-            city: item.city,
-            activeUsers: item.activeUsers
-        }));
-    } catch (error) {
-        console.error('Error fetching city stats:', error);
-        throw error;
-    }
-}
-
-/**
- * Fetch page views data
- * @param {Object} dateRange - Date range for analytics
- * @returns {Promise<Array>} Page views data
- */
-async fetchPageViews(dateRange) {
-    try {
-        const result = await fetchReport(
-            [{ name: 'screenPageViews' }],
-            [],
-            dateRange
-        );
-
-        return result.map(item => ({
-            screenPageViews: item.screenPageViews,
-            date: item.date
-        }));
-    } catch (error) {
-        console.error('Error fetching page views:', error);
-        throw error;
-    }
-}
-
-/**
- * Fetch bounce rate data
- * @param {Object} dateRange - Date range for analytics
- * @returns {Promise<Array>} Bounce rate data
- */
-async fetchBounceRate(dateRange) {
-    try {
-        const result = await fetchReport(
-            [{ name: 'bounceRate' }],
-            [],
-            dateRange
-        );
-
-        return result.map(item => ({
-            bounceRate: item.bounceRate,
-            date: item.date
-        }));
-    } catch (error) {
-        console.error('Error fetching bounce rate:', error);
-        throw error;
-    }
-}
-
-/**
- * Fetch page views by page
- * @param {Object} dateRange - Date range for analytics
- * @returns {Promise<Array>} Page views by page data
- */
-async fetchPageViewsByPage(dateRange) {
-    try {
-        const result = await fetchReport(
-            [{ name: 'screenPageViews' }],
-            [{ name: 'pagePath' }],
-            dateRange
-        );
-
-        return result.map(item => ({
-            pagePath: item.pagePath,
-            screenPageViews: item.screenPageViews
-        }));
-    } catch (error) {
-        console.error('Error fetching page views by page:', error);
-        throw error;
-    }
-}
-
-/**
- * Fetch traffic sources data
- * @param {Object} dateRange - Date range for analytics
- * @returns {Promise<Array>} Traffic sources data
- */
-async fetchTrafficSources(dateRange) {
-    try {
-        const result = await fetchReport(
-            [
-                { name: 'sessions' },
-                { name: 'totalUsers' }
-            ],
-            [
-                { name: 'sessionDefaultChannelGroup' }
-            ],
-            dateRange
-        );
-
-        return result;
-    } catch (error) {
-        console.error('Error fetching traffic sources:', error);
-        throw error;
-    }
-}
-
-/**
- * Fetch session duration data
- * @param {Object} dateRange - Date range for analytics
- * @returns {Promise<Array>} Session duration data
- */
-async fetchSessionDuration(dateRange) {
-    try {
-        const result = await fetchReport(
-            [{ name: 'averageSessionDuration' }],
-            [{ name: 'sessionSourceMedium' }],
-            dateRange
-        );
-
-        return result;
-    } catch (error) {
-        console.error('Error fetching session duration:', error);
-        throw error;
-    }
-}
-
-/**
- * Get total enquiries count
- * @returns {Promise<number>} Total number of enquiries
- */
-async getTotalEnquiriesCount() {
-    try {
-        return await prisma.enquiry.count();
-    } catch (error) {
-        console.error('Error counting enquiries:', error);
-        throw error;
-    }
-}
-
-/**
- * Get total newsletter subscribers count
- * @returns {Promise<number>} Total number of newsletter subscribers
- */
-async getTotalNewsletterSubscribers() {
-    try {
-        return await prisma.newsletter.count();
-    } catch (error) {
-        console.error('Error counting newsletter subscribers:', error);
-        throw error;
-    }
-}
-
-// Add this method to your Repositorys class
-async fetchCountryStats(dateRange) {
-    try {
-        const result = await fetchReport(
-            [{ name: 'totalUsers' }],
-            [{ name: 'country' }],
-            dateRange
-        );
-
-        return result.map(item => ({
-            country: item.country,
-            totalUsers: item.totalUsers
-        }));
-    } catch (error) {
-        console.error('Error fetching country stats:', error);
-        throw error;
-    }
-}
-
-
-/**
- * Fetch event name counts data from Google Analytics
- * @param {Object} dateRange - Date range for analytics
- * @returns {Promise<Array>} Event name counts data
- */
-async fetchEventNameCounts(dateRange) {
-  try {
       const result = await fetchReport(
-          [{ name: 'eventCount' }],
-          [{ name: 'eventName' }],
-          dateRange
+        [{ name: 'activeUsers' }],
+        [],
+        dateRange
       );
 
       return result.map(item => ({
-          eventName: item.eventName,
-          eventCount: item.eventCount
+        activeUsers: item.activeUsers,
+        date: item.date
       }));
-  } catch (error) {
+    } catch (error) {
+      console.error('Error fetching active users:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Fetch engaged sessions data
+   * @param {Object} dateRange - Date range for analytics
+   * @returns {Promise<Array>} Engaged sessions data
+   */
+  async fetchEngagedSessions(dateRange) {
+    try {
+      const result = await fetchReport(
+        [{ name: 'engagedSessions' }],
+        [],
+        dateRange
+      );
+
+      return result.map(item => ({
+        engagedSessions: item.engagedSessions,
+        date: item.date
+      }));
+    } catch (error) {
+      console.error('Error fetching engaged sessions:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Fetch city-wise stats
+   * @param {Object} dateRange - Date range for analytics
+   * @returns {Promise<Array>} City statistics
+   */
+  async fetchCityStats(dateRange) {
+    try {
+      const result = await fetchReport(
+        [{ name: 'activeUsers' }],
+        [{ name: 'city' }],
+        dateRange
+      );
+
+      return result.map(item => ({
+        city: item.city,
+        activeUsers: item.activeUsers
+      }));
+    } catch (error) {
+      console.error('Error fetching city stats:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Fetch page views data
+   * @param {Object} dateRange - Date range for analytics
+   * @returns {Promise<Array>} Page views data
+   */
+  async fetchPageViews(dateRange) {
+    try {
+      const result = await fetchReport(
+        [{ name: 'screenPageViews' }],
+        [],
+        dateRange
+      );
+
+      return result.map(item => ({
+        screenPageViews: item.screenPageViews,
+        date: item.date
+      }));
+    } catch (error) {
+      console.error('Error fetching page views:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Fetch bounce rate data
+   * @param {Object} dateRange - Date range for analytics
+   * @returns {Promise<Array>} Bounce rate data
+   */
+  async fetchBounceRate(dateRange) {
+    try {
+      const result = await fetchReport(
+        [{ name: 'bounceRate' }],
+        [],
+        dateRange
+      );
+
+      return result.map(item => ({
+        bounceRate: item.bounceRate,
+        date: item.date
+      }));
+    } catch (error) {
+      console.error('Error fetching bounce rate:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Fetch page views by page
+   * @param {Object} dateRange - Date range for analytics
+   * @returns {Promise<Array>} Page views by page data
+   */
+  async fetchPageViewsByPage(dateRange) {
+    try {
+      const result = await fetchReport(
+        [{ name: 'screenPageViews' }],
+        [{ name: 'pagePath' }],
+        dateRange
+      );
+
+      return result.map(item => ({
+        pagePath: item.pagePath,
+        screenPageViews: item.screenPageViews
+      }));
+    } catch (error) {
+      console.error('Error fetching page views by page:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Fetch traffic sources data
+   * @param {Object} dateRange - Date range for analytics
+   * @returns {Promise<Array>} Traffic sources data
+   */
+  async fetchTrafficSources(dateRange) {
+    try {
+      const result = await fetchReport(
+        [
+          { name: 'sessions' },
+          { name: 'totalUsers' }
+        ],
+        [
+          { name: 'sessionDefaultChannelGroup' }
+        ],
+        dateRange
+      );
+
+      return result;
+    } catch (error) {
+      console.error('Error fetching traffic sources:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Fetch session duration data
+   * @param {Object} dateRange - Date range for analytics
+   * @returns {Promise<Array>} Session duration data
+   */
+  async fetchSessionDuration(dateRange) {
+    try {
+      const result = await fetchReport(
+        [{ name: 'averageSessionDuration' }],
+        [{ name: 'sessionSourceMedium' }],
+        dateRange
+      );
+
+      return result;
+    } catch (error) {
+      console.error('Error fetching session duration:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get total enquiries count
+   * @returns {Promise<number>} Total number of enquiries
+   */
+  async getTotalEnquiriesCount() {
+    try {
+      return await prisma.enquiry.count();
+    } catch (error) {
+      console.error('Error counting enquiries:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get total newsletter subscribers count
+   * @returns {Promise<number>} Total number of newsletter subscribers
+   */
+  async getTotalNewsletterSubscribers() {
+    try {
+      return await prisma.newsletter.count();
+    } catch (error) {
+      console.error('Error counting newsletter subscribers:', error);
+      throw error;
+    }
+  }
+
+  // Add this method to your Repositorys class
+  async fetchCountryStats(dateRange) {
+    try {
+      const result = await fetchReport(
+        [{ name: 'totalUsers' }],
+        [{ name: 'country' }],
+        dateRange
+      );
+
+      return result.map(item => ({
+        country: item.country,
+        totalUsers: item.totalUsers
+      }));
+    } catch (error) {
+      console.error('Error fetching country stats:', error);
+      throw error;
+    }
+  }
+
+
+  /**
+   * Fetch event name counts data from Google Analytics
+   * @param {Object} dateRange - Date range for analytics
+   * @returns {Promise<Array>} Event name counts data
+   */
+  async fetchEventNameCounts(dateRange) {
+    try {
+      const result = await fetchReport(
+        [{ name: 'eventCount' }],
+        [{ name: 'eventName' }],
+        dateRange
+      );
+
+      return result.map(item => ({
+        eventName: item.eventName,
+        eventCount: item.eventCount
+      }));
+    } catch (error) {
       console.error('Error fetching event name counts:', error);
       throw error;
+    }
   }
-}
 
 
 
@@ -805,73 +808,67 @@ async fetchEventNameCounts(dateRange) {
         FieldType: fieldType,
       },
     });
-  } 
-    
-
-async getTooltipByFieldType(fieldType) {
-  return await prisma.tooltip.findUnique({
-    where: { FieldType: fieldType },
-  });
   }
 
 
-async getTooltip() {
-  return await prisma.tooltip.findMany({
-    orderBy: { createdAt: 'desc' },
-  });
-}
+  async getTooltipByFieldType(fieldType) {
+    return await prisma.tooltip.findUnique({
+      where: { FieldType: fieldType },
+    });
+  }
 
 
+  async getTooltip() {
+    return await prisma.tooltip.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 
 
+    /**
+    * notification Repository - Handles CRUD operations for notification management
+    */
 
 
-
-
-
-
-
-
-
-async  getAllNotifications(){
+  async getAllNotifications() {
     return await prisma.notification.findMany({
       orderBy: {
         createdAt: 'desc',
       },
-      take: 15 
+      take: 15
     });
   }
-  async deleteNotification(id){
+  async deleteNotification(id) {
     return await prisma.notification.delete({
       where: {
-        id : id
+        id: id
       }
     });
   }
-  async updateUserName(userName,userId){
+  async updateUserName(userName, userId) {
     return await prisma.user.update({
       where: {
         id: userId,
       },
       data: {
-        name:userName 
+        name: userName
       },
     });
   }
 
-  async clearAllNotifications(){
+  async clearAllNotifications() {
     return await prisma.notification.deleteMany({})
   }
 
 
- async markReadAsNotification(notificationId){
-   return await prisma.notification.update({
-      where: {id:  notificationId },
+  async markReadAsNotification(notificationId) {
+    return await prisma.notification.update({
+      where: { id: notificationId },
       data: { isRead: true },
     });
   }
 
-  async markAllAsReadNotification(){
+  async markAllAsReadNotification() {
     return await prisma.notification.updateMany({
       where: {
         isRead: false
@@ -881,20 +878,27 @@ async  getAllNotifications(){
       }
     });
   }
-    async createChat(chat) {      
+
+
+
+    /**
+    * chat Repository - Handles CRUD operations for chat management
+    */
+
+  async createChat(chat) {
     return await prisma.chatbot.create({
       data: chat
     })
   }
-     async deleteChat(chatId) {
+  async deleteChat(chatId) {
     return await prisma.chatbot.delete({
-      where:{
-        id:chatId
+      where: {
+        id: chatId
       }
     })
   }
 
-  async  getAllChats(){
+  async getAllChats() {
     return await prisma.chatbot.findMany({
       orderBy: {
         order: 'asc',
@@ -908,47 +912,93 @@ async  getAllNotifications(){
       data: updatedData,
     });
   }
-  
+
   async changeChatorder(updatedChats) {
-   const result = await prisma.$transaction(
-      updatedChats.map(chat => 
+    const result = await prisma.$transaction(
+      updatedChats.map(chat =>
         prisma.chatbot.update({
           where: { id: chat.id },
           data: { order: chat.order },
         })
       )
     );
-        return result;
+    return result;
 
   }
 
-  async createBrochure(brochureData){    
+
+
+  
+    /**
+    * Brochure Repository - Handles CRUD operations for brochure management
+    */
+
+  async createBrochure(brochureData) {
     return await prisma.brochure.create({
-      data:brochureData
+      data: brochureData
     })
-    
+
   }
 
-  async getAllBrochure(){
+  async getAllBrochure() {
     return await prisma.brochure.findMany()
   }
 
-  async editBrochure(brochureId,brochureData){
-    return  await prisma.brochure.update({
-      where:{id:brochureId},
-      data:brochureData
+  async editBrochure(brochureId, brochureData) {
+    return await prisma.brochure.update({
+      where: { id: brochureId },
+      data: brochureData
     })
   }
-  async deleteBrochure(brochureId){
+  async deleteBrochure(brochureId) {
     await prisma.brochure.delete({
-      where:{id:brochureId}
+      where: { id: brochureId }
     })
   }
-  async getBrochureById(brochureId){
-   return  await prisma.brochure.findUnique({
-      where:{id:brochureId}
+  async getBrochureById(brochureId) {
+    return await prisma.brochure.findUnique({
+      where: { id: brochureId }
     })
   }
+
+
+
+  /**
+   * Get total Brochure count
+   * @returns {Promise<number>} Total number of newsletter subscribers
+   */
+  async getTotalBrochure() {
+    try {
+      return await prisma.brochure.count();
+    } catch (error) {
+      console.error('Error counting Brochure:', error);
+      throw error;
+    }
+  }
+
+
+  /**
+   * Get total Sliders count
+   * @returns {Promise<number>} Total number of Sliders
+   */
+  async getTotalSliders() {
+    try {
+      return await prisma.slider.count();
+    } catch (error) {
+      console.error('Error counting Sliders:', error);
+      throw error;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
 }
 
 export default Repositorys;
