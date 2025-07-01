@@ -47,7 +47,7 @@ class SEOController {
     async getSeo(req,res){
         try {
             const { pageTitle } = req.params;
-            console.log(pageTitle);
+            console.log(pageTitle,"ddd");
             
             const response = await this.#seoService.getSeo(pageTitle)
             return res.status(response.status).json(response);

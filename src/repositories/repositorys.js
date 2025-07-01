@@ -100,6 +100,12 @@ class Repositorys {
       orderBy: { createdAt: 'desc' },
     });
   }
+  async updateEnquiry(enquiryId){
+   return await prisma.enquiry.update({
+      where: { id:enquiryId },
+      data: { status: 'read' },
+    });
+  }
 
 
   /**
